@@ -18,6 +18,7 @@ import { RouterView } from "vue-router";
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 
+
   &__left {
     display: flex;
     align-items: center;

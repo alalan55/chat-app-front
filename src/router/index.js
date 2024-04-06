@@ -16,8 +16,13 @@ const router = createRouter({
       children: [
         {
           path: '',
-          name: 'loginPage',
+          name: 'login-page',
           component: () => import('../components/templates/loginTemplate.vue')
+        },
+        {
+          path: 'create-account',
+          name: 'create-account-page',
+          component: () => import('../components/templates/createAccountTemplate.vue')
         }
       ]
     }

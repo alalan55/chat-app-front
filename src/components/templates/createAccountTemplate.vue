@@ -1,77 +1,34 @@
 <script setup>
-import { RouterLink, useRouter } from "vue-router";
-import { reactive, ref } from "vue";
-import { useUserStore } from "@/stores/user";
-import { useToast } from "primevue/usetoast";
-import http from "@/services/axios";
-import Button from "primevue/button";
-
-const form = reactive({ email: "", password: "" });
-const loading = ref(false);
-const store = useUserStore();
-const toast = useToast();
-const router = useRouter()
-
-const login = async () => {
-  if (form.email && form.password) {
-    try {
-      loading.value = true;
-
-      const { data } = await http.post("login", form);
-      store.setCurrentUser(data);
-
-      toast.add({
-        severity: "success",
-        summary: "Ok",
-        detail: "Login realizado com sucesso",
-        life: 3000,
-      });
-
-      loading.value = false;
-
-      router.push('/home')
-
-    } catch (error) {
-      console.error("error", error);
-      loading.value = false;
-    }
-  }
-};
 </script>
-
 <template>
   <div class="login">
-    <Toast />
     <div class="login__card">
       <div class="login__card__header">
-        <small>Faça login no</small>
+        <small>Se inscreva no</small>
         <br />
         <strong>CHAT-APP.</strong>
       </div>
 
-      <form @submit.prevent class="login__card__body">
+      <form class="login__card__body">
         <label>
           E-mail
-          <input v-model="form.email" type="text" />
+          <input type="text" />
+        </label>
+        <label>
+         Nome
+          <input type="text" />
         </label>
         <label>
           Senha
-          <input v-model="form.password" type="password" />
+          <input type="password" />
         </label>
-        <Button
-          :disabled="loading"
-          :loading="loading"
-          label=" Login"
-          severity="success"
-          @click="login"
-        />
-      </form>
 
-      <div class="login__card__bottom">
-        <span
-          >Ou faça o seu cadastro <RouterLink to="/create-account">Aqui!😁</RouterLink>
-        </span>
-      </div>
+        <label>
+          Confirmação de senha
+          <input type="password" />
+        </label>
+        <button>Cadastrar</button>
+      </form>
     </div>
   </div>
 </template>
@@ -84,7 +41,7 @@ const login = async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5;
+  padding: 1.5rem;
 
   &__card {
     background: white;
@@ -132,12 +89,12 @@ const login = async () => {
         width: 30%;
         margin: 0 auto;
         padding: 0.7rem 0.5rem;
-        // border-radius: 15px;
+        border-radius: 15px;
         border: none;
         font-weight: 700;
         font-size: 0.75rem;
-        // background: #3ebe53;
-        // color: white;
+        background: #3ebe53;
+        color: white;
         cursor: pointer;
       }
     }
