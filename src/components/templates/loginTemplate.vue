@@ -10,7 +10,7 @@ const form = reactive({ email: "", password: "" });
 const loading = ref(false);
 const store = useUserStore();
 const toast = useToast();
-const router = useRouter()
+const router = useRouter();
 
 const login = async () => {
   if (form.email && form.password) {
@@ -29,8 +29,7 @@ const login = async () => {
 
       loading.value = false;
 
-      router.push('/home')
-
+      router.push("/home");
     } catch (error) {
       console.error("error", error);
       loading.value = false;
@@ -44,25 +43,46 @@ const login = async () => {
     <Toast />
     <div class="login__card">
       <div class="login__card__header">
-        <small>Faça login no</small>
-        <br />
-        <strong>CHAT-APP.</strong>
+        <figure>
+          <img src="/img/logo.png" alt="Logo" />
+        </figure>
+
+        <strong>Login</strong>
+        <small>Preencha com seu e-mail e senha para fazer login</small>
       </div>
 
       <form @submit.prevent class="login__card__body">
         <label>
           E-mail
-          <input v-model="form.email" type="text" />
+          <div>
+            <figure class="left-image">
+              <img src="/icons/user-icon.svg" alt="Ícone de usuário" />
+            </figure>
+            <input v-model="form.email" type="text" placeholder="Insira o seu e-mail" />
+          </div>
         </label>
         <label>
           Senha
-          <input v-model="form.password" type="password" />
+          <div>
+            <figure class="left-image">
+              <img src="/icons/lock-icon.svg" alt="Ícone de cadeado" />
+            </figure>
+            <input
+              v-model="form.password"
+              type="password"
+              placeholder="Digite a sua senha"
+            />
+            <figure class="right-image">
+              <img src="/icons/eye-off-icon.svg" alt="Ícone de usuário" />
+            </figure>
+          </div>
         </label>
         <Button
           :disabled="loading"
           :loading="loading"
           label=" Login"
           severity="success"
+          style="width: 100%"
           @click="login"
         />
       </form>
@@ -84,7 +104,7 @@ const login = async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5;
+  padding: 1.5rem;
 
   &__card {
     background: white;
@@ -95,13 +115,27 @@ const login = async () => {
     flex-direction: column;
     gap: 1rem;
     box-shadow: 0 10px 8px -1px rgba(0, 0, 0, 0.05);
-    max-width: 80%;
+    max-width: 500px;
 
     &__header {
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       font-size: 1rem;
       strong {
         font-weight: 800;
+        font-size: 1.1rem;
+      }
+
+      figure {
+        width: 200px;
+        height: 100px;
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+        }
       }
     }
 
@@ -113,19 +147,64 @@ const login = async () => {
       label {
         display: flex;
         flex-direction: column;
-        font-weight: 800;
+        font-weight: 600;
         font-size: 0.75rem;
         color: #3a3535;
       }
 
-      input {
-        margin-top: 0.5rem;
-        border-radius: 10px;
-        border: 1px solid #b8b6b6;
-        flex: 3;
-        padding: 0.8rem 0.5rem;
-        &:focus {
-          outline: none;
+      div {
+        position: relative;
+        padding: 0 !important;
+        margin-top: 0.8rem;
+
+        .left-image {
+          position: absolute;
+          width: 30px;
+          height: 30px;
+          top: 50%;
+          left: 5%;
+
+          transform: translate(-50%, -50%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          img {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
+          }
+        }
+        .right-image {
+          position: absolute;
+          width: 30px;
+          height: 30px;
+          top: 50%;
+          left: 93%;
+
+          transform: translate(-50%, -50%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          img {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
+          }
+        }
+        input {
+          width: 100%;
+
+          border-radius: 10px;
+          // border: 1px solid #b8b6b6;
+          border: none;
+          background: #edf2f6;
+          flex: 3;
+          padding: 1rem 2.8rem 1rem 2.5rem;
+          &:focus {
+            outline: none;
+          }
         }
       }
       button {
