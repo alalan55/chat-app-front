@@ -17,24 +17,26 @@ const login = async () => {
   if (form.email && form.password) {
     try {
       loading.value = true;
-
       const { data } = await http.post("login", form);
       store.setCurrentUser(data);
-
-      toast.add({
-        severity: "success",
-        summary: "Ok",
-        detail: "Login realizado com sucesso",
-        life: 3000,
-      });
-
       loading.value = false;
-
       router.push("/home");
     } catch (error) {
-      console.error("error", error);
       loading.value = false;
+      toast.add({
+        severity: "error",
+        summary: "Falha",
+        detail: "Falha ao realizar o login",
+        life: 3000,
+      });
     }
+  } else {
+    toast.add({
+      severity: "warn",
+      summary: "Aviso",
+      detail: "Preencha todos os campos",
+      life: 3000,
+    });
   }
 };
 </script>

@@ -1,12 +1,53 @@
 <script setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useToast } from "primevue/usetoast";
 import Button from "primevue/button";
+import http from "@/services/axios";
+
+const router = useRouter();
 const showMessage = ref(false);
 const showMessageConfirmation = ref(false);
 const loading = ref(false);
+const new_user = ref({ name: "", email: "", password: "" });
+const confirmation_pawword = ref("");
+
+const toast = useToast();
+
+const createUser = async () => {
+  if (new_user.value.password == confirmation_pawword.value) {
+    try {
+      loading.value = true;
+      await http.post("", new_user.value);
+      loading.value = false;
+      toast.add({
+        severity: "success",
+        summary: "success",
+        detail: "Contra criada com sucesso",
+        life: 3000,
+      });
+      router.push("/");
+    } catch (error) {
+      toast.add({
+        severity: "error",
+        summary: "error",
+        detail: "Erro ao criar conta",
+        life: 3000,
+      });
+    }
+  } else {
+    toast.add({
+      severity: "warn",
+      summary: "Aviso",
+      detail: "A senha precisa ser igual a confirmação",
+      life: 3000,
+    });
+  }
+};
 </script>
 <template>
   <div class="login">
+    <Toast />
     <div class="login__card">
       <div class="login__card__header">
         <strong>CHATAPP</strong>
@@ -20,7 +61,11 @@ const loading = ref(false);
             <figure class="left-image">
               <img src="/icons/user-icon.svg" alt="Ícone de usuário" />
             </figure>
-            <input type="text" placeholder="Insira o seu e-mail" />
+            <input
+              v-model="new_user.email"
+              type="text"
+              placeholder="Insira o seu e-mail"
+            />
           </div>
         </label>
         <label>
@@ -29,7 +74,7 @@ const loading = ref(false);
             <figure class="left-image">
               <img src="/icons/user-icon.svg" alt="Ícone de usuário" />
             </figure>
-            <input type="text" placeholder="Insira o seu nome" />
+            <input v-model="new_user.name" type="text" placeholder="Insira o seu nome" />
           </div>
         </label>
         <label>
@@ -39,6 +84,7 @@ const loading = ref(false);
               <img src="/icons/lock-icon.svg" alt="Ícone de cadeado" />
             </figure>
             <input
+              v-model="new_user.password"
               :type="`${!showMessage ? 'password' : 'text'}`"
               placeholder="Digite a sua senha"
             />
@@ -58,6 +104,7 @@ const loading = ref(false);
               <img src="/icons/lock-icon.svg" alt="Ícone de cadeado" />
             </figure>
             <input
+              v-model="confirmation_pawword"
               :type="`${!showMessageConfirmation ? 'password' : 'text'}`"
               placeholder="Digite a sua senha"
             />
@@ -80,16 +127,11 @@ const loading = ref(false);
           label=" Cadastrar"
           severity="info"
           style="width: 100%"
+          @click="createUser"
         />
       </form>
 
-      <div class="dot-1"></div>
-
-      <div class="dot-2"></div>
-
-      <div class="dot-3"></div>
-
-      <div class="dot-4"></div>
+      <div v-for="i in 4" :key="i" :class="`dot-${i}`"></div>
     </div>
   </div>
 </template>
