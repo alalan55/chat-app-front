@@ -240,8 +240,12 @@ const login = async () => {
     }
 
     .dot-4 {
-      background: rgb(4,170,163);
-background: radial-gradient(circle, rgba(4,170,163,0.4431022408963585) 0%, rgba(4,170,163,0.10136554621848737) 100%);
+      background: rgb(4, 170, 163);
+      background: radial-gradient(
+        circle,
+        rgba(4, 170, 163, 0.4431022408963585) 0%,
+        rgba(4, 170, 163, 0.10136554621848737) 100%
+      );
       width: 60px;
       height: 60px;
       border-radius: 50%;
