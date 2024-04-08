@@ -47,7 +47,6 @@ const createUser = async () => {
 </script>
 <template>
   <div class="login">
-    <Toast />
     <div class="login__card">
       <div class="login__card__header">
         <strong>CHATAPP</strong>
