@@ -8,6 +8,7 @@ import Button from "primevue/button";
 
 const form = reactive({ email: "", password: "" });
 const loading = ref(false);
+const showMessage = ref(false);
 const store = useUserStore();
 const toast = useToast();
 const router = useRouter();
@@ -43,11 +44,11 @@ const login = async () => {
     <Toast />
     <div class="login__card">
       <div class="login__card__header">
-        <figure>
+        <!-- <figure>
           <img src="/img/logo.png" alt="Logo" />
-        </figure>
+        </figure> -->
 
-        <strong>Login</strong>
+        <strong>CHATAPP</strong>
         <small>Preencha com seu e-mail e senha para fazer login</small>
       </div>
 
@@ -69,11 +70,14 @@ const login = async () => {
             </figure>
             <input
               v-model="form.password"
-              type="password"
+              :type="`${!showMessage ? 'password' : 'text'}`"
               placeholder="Digite a sua senha"
             />
-            <figure class="right-image">
-              <img src="/icons/eye-off-icon.svg" alt="Ícone de usuário" />
+            <figure class="right-image" @click="showMessage = !showMessage">
+              <img
+                :src="`/icons/${!showMessage ? 'eye-off-icon' : 'eye-open-icon'}.svg`"
+                alt="Ícone de usuário"
+              />
             </figure>
           </div>
         </label>
@@ -81,22 +85,69 @@ const login = async () => {
           :disabled="loading"
           :loading="loading"
           label=" Login"
-          severity="success"
+          severity="info"
           style="width: 100%"
           @click="login"
         />
       </form>
 
       <div class="login__card__bottom">
-        <span
-          >Ou faça o seu cadastro <RouterLink to="/create-account">Aqui!😁</RouterLink>
-        </span>
+        <small
+          ><RouterLink to="/create-account"><strong>Novo por aqui?</strong></RouterLink>
+          😁
+        </small>
       </div>
+
+      <div class="dot-1"></div>
+
+      <div class="dot-2"></div>
+
+      <div class="dot-3"></div>
+
+      <div class="dot-4"></div>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
+@font-face {
+  font-family: "LOT";
+  src: url("/src/assets/fonts/LOT.otf");
+}
+@keyframes move-1 {
+  0% {
+    bottom: -10%;
+  }
+  25% {
+    bottom: -12%;
+  }
+  50% {
+    bottom: -12%;
+  }
+  75% {
+    bottom: -12%;
+  }
+  100% {
+    bottom: -10%;
+  }
+}
+@keyframes move-2 {
+  0% {
+    top: -1%;
+  }
+  25% {
+    top: -5%;
+  }
+  50% {
+    top: -5%;
+  }
+  75% {
+    top: -5%;
+  }
+  100% {
+    top: -1%;
+  }
+}
 .login {
   background: #eaedf0;
   width: 100%;
@@ -105,17 +156,100 @@ const login = async () => {
   align-items: center;
   justify-content: center;
   padding: 1.5rem;
+  position: relative;
+  z-index: 10;
+  overflow: hidden;
 
   &__card {
-    background: white;
+    // background: white;
+    background: rgba(#fff, 0.94);
     width: 100%;
     padding: 2rem;
     border-radius: 5px;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 2rem;
     box-shadow: 0 10px 8px -1px rgba(0, 0, 0, 0.05);
     max-width: 500px;
+    position: relative;
+
+    .dot-1 {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      position: absolute;
+      bottom: -10%;
+      right: -10%;
+      background: rgb(14, 165, 233);
+      background: radial-gradient(
+        circle,
+        rgba(14, 165, 233, 1) 0%,
+        rgba(14, 165, 233, 0.10416666666666663) 100%
+      );
+      z-index: -5;
+      animation-name: move-1;
+      animation-duration: 4s;
+      animation-iteration-count: infinite;
+      transition: 0.2s ease-in-out;
+
+      @media (max-width: 750px) {
+        width: 100px;
+        height: 100px;
+        bottom: 1%;
+        right: -5%;
+      }
+    }
+
+    .dot-2 {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      position: absolute;
+      top: -1%;
+      left: -10%;
+      background: rgb(14, 165, 233);
+      background: radial-gradient(
+        circle,
+        rgba(14, 165, 233, 1) 0%,
+        rgba(14, 165, 233, 0.10416666666666663) 100%
+      );
+      z-index: -5;
+
+      animation-name: move-2;
+      animation-duration: 3s;
+      animation-iteration-count: infinite;
+      transition: 0.2s ease-in-out;
+      @media (max-width: 750px) {
+        left: -5%;
+        width: 60px;
+        height: 60px;
+      }
+    }
+
+    .dot-3 {
+      // border: 2px dashed rgb(14, 165, 233);
+      border: 3px dashed #04aaa3;
+
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      position: absolute;
+      top: -8.5%;
+      right: 12%;
+      z-index: -1;
+    }
+
+    .dot-4 {
+      background: rgb(4,170,163);
+background: radial-gradient(circle, rgba(4,170,163,0.4431022408963585) 0%, rgba(4,170,163,0.10136554621848737) 100%);
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      position: absolute;
+      bottom: -4%;
+      left: -5%;
+      z-index: -1;
+    }
 
     &__header {
       text-align: center;
@@ -124,8 +258,12 @@ const login = async () => {
       align-items: center;
       font-size: 1rem;
       strong {
-        font-weight: 800;
-        font-size: 1.1rem;
+        // font-weight: 900;
+        font-size: 1.6rem;
+        letter-spacing: 0.1rem;
+        display: block;
+        margin-bottom: 0.8rem;
+        font-family: "LOT";
       }
 
       figure {
@@ -162,12 +300,13 @@ const login = async () => {
           width: 30px;
           height: 30px;
           top: 50%;
-          left: 5%;
+          left: 22px;
 
           transform: translate(-50%, -50%);
           display: flex;
           align-items: center;
           justify-content: center;
+          transition: 0.3s ease;
 
           img {
             width: 80%;
@@ -180,12 +319,12 @@ const login = async () => {
           width: 30px;
           height: 30px;
           top: 50%;
-          left: 93%;
-
+          right: 0;
           transform: translate(-50%, -50%);
           display: flex;
           align-items: center;
           justify-content: center;
+          cursor: pointer;
 
           img {
             width: 80%;
@@ -195,16 +334,20 @@ const login = async () => {
         }
         input {
           width: 100%;
-
           border-radius: 10px;
-          // border: 1px solid #b8b6b6;
           border: none;
           background: #edf2f6;
           flex: 3;
-          padding: 1rem 2.8rem 1rem 2.5rem;
+          padding: 1rem 25px 1rem 2.5rem;
+          font-weight: 600;
+          color: #3f3f3f;
           &:focus {
             outline: none;
           }
+
+          // @media(max-width: 750px){
+          //   padding: 1rem 2.4rem;
+          // }
         }
       }
       button {
@@ -229,6 +372,11 @@ const login = async () => {
           text-decoration: none;
           color: black;
           font-weight: 800;
+        }
+      }
+      small {
+        a {
+          color: #0f8bc4;
         }
       }
     }
