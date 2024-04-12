@@ -145,6 +145,8 @@ watch(search, (nv) => {
 </template>
 
 <style lang="scss" scoped>
+@import "@/assets/main.scss";
+
 .modal {
   padding: 1rem;
   display: flex;
@@ -173,8 +175,6 @@ watch(search, (nv) => {
       border-radius: 10px;
       border: none;
       background: #eff2f5;
-      flex: 3;
-      // padding: 1rem 25px 1rem 2.5rem;
       padding: 0.8rem;
       font-weight: 600;
       color: #3f3f3f;
@@ -187,6 +187,7 @@ watch(search, (nv) => {
   &__body {
     flex: 1;
     overflow: auto;
+    @include trackScrollBar;
 
     &__list {
       display: flex;
@@ -235,21 +236,6 @@ watch(search, (nv) => {
           box-shadow: -6px 10px 28px -12px rgba(0, 0, 0, 0.25);
         }
       }
-    }
-    &::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: #f1f1f1;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: #888;
-    }
-
-    &::-webkit-scrollbar-thumb:hover {
-      background: #555;
     }
   }
 }

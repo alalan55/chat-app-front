@@ -48,6 +48,8 @@ const startConversation = (user) => {
 </template>
 
 <style lang="scss" scoped>
+@import "@/assets/main.scss";
+
 .container {
   border-radius: 13px;
   overflow: hidden;
@@ -63,7 +65,7 @@ const startConversation = (user) => {
     grid-column: 1; /* A área profile começa na primeira coluna */
     grid-row: 1; /* E na primeira linha */
     min-width: 350px;
-    transition: .2s ease-in-out;
+    transition: 0.2s ease-in-out;
   }
   &__content {
     grid-column: 2 / span 1; /* O container começa na segunda coluna */
@@ -77,23 +79,8 @@ const startConversation = (user) => {
     grid-row: 2 / span 2; /* E ocupa duas linhas */
     overflow: auto;
     min-width: 350px;
-    transition: .2s ease-in-out;
-
-    &::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: #f1f1f1;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: #888;
-    }
-
-    &::-webkit-scrollbar-thumb:hover {
-      background: #555;
-    }
+    transition: 0.2s ease-in-out;
+    @include trackScrollBar;
   }
 }
 </style>
