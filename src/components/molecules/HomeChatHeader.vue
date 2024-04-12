@@ -9,7 +9,11 @@
           @click="$emit('open-friends-list')"
         />
         <i v-tooltip="'Novo grupo'" class="pi pi-comments" />
-        <i v-tooltip="'Adicionar amigo'" class="pi pi-user-plus" />
+        <i
+          v-tooltip="'Adicionar amigo'"
+          class="pi pi-user-plus"
+          @click="$emit('add-friend')"
+        />
       </div>
     </div>
     <div class="wrapper__input">

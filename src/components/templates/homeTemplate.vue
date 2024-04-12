@@ -2,9 +2,11 @@
 import HomeChatHeader from "@/components/molecules/HomeChatHeader.vue";
 import HomeChatList from "@/components/molecules/HomeChatList.vue";
 import FriendsListModal from "@/components/organisms/FriendsListModal.vue";
+import AddFriendModal from "@/components/organisms/AddFriendModal.vue";
 import Dialog from "primevue/dialog";
 
 const friend_dialog = ref(false);
+const add_friend_dialog = ref(false);
 
 import { ref } from "vue";
 
@@ -20,7 +22,10 @@ const startConversation = (user) => {
 <template>
   <main class="container">
     <section class="container__profile">
-      <HomeChatHeader @open-friends-list="openFriendsListModal" />
+      <HomeChatHeader
+        @open-friends-list="openFriendsListModal"
+        @add-friend="add_friend_dialog = true"
+      />
     </section>
 
     <section class="container__content">
@@ -40,6 +45,20 @@ const startConversation = (user) => {
       <template #container>
         <FriendsListModal
           @close="friend_dialog = false"
+          @start-conversation="startConversation"
+        />
+      </template>
+    </Dialog>
+
+    <Dialog
+      v-model:visible="add_friend_dialog"
+      modal
+      :style="{ width: '40vw' }"
+      :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+    >
+      <template #container>
+        <AddFriendModal
+          @close="add_friend_dialog = false"
           @start-conversation="startConversation"
         />
       </template>
