@@ -10,6 +10,8 @@ import HomeTemplate from "@/components/templates/homeTemplate.vue";
 
 <style lang="scss" scoped>
 .home-view {
-  height: auto;
+  height: 100vh;
+  height: 100dvh;
+  padding: 2rem;
 }
 </style>
