@@ -7,7 +7,7 @@ import Button from "primevue/button";
     <div class="modal__header">
       <div class="left">
         <div class="title">
-          <span>Adicionar amigo</span>
+          <span>Adicionar amizade</span>
         </div>
       </div>
       <div class="right">
