@@ -14,9 +14,5 @@ import HomeChatList from "../molecules/HomeChatList.vue";
 .conversations {
   display: flex;
   flex-direction: column;
-  border: 3px solid;
-  .list {
-    // flex: 1;
-  }
 }
 </style>
