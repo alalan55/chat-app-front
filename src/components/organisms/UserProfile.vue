@@ -1,19 +1,32 @@
-<script setup></script>
+<script setup>
+import Button from "primevue/button";
+const emit = defineEmits(["back-previous-page"]);
+</script>
 
 <template>
   <div class="profile">
     <div class="profile__header">
-      <figure></figure>
-      <span>Usuário da Silva Sauro</span>
-      <small>fulano@fulanoteste.com</small>
+      <Button
+        icon="pi pi-arrow-left"
+        aria-label="Filter"
+        size="small"
+        outlined
+        severity="info"
+        @click="emit('back-previous-page')"
+      />
     </div>
+    <div class="profile__middle">
+      <figure></figure>
+      <span class="name">Usuário da Silva Sauro</span>
+      <small>fulano@fulanoteste.com</small>
 
-    <div class="profile__body">
-      <span>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto maxime esse sint
-        quam, corporis rerum facilis dolorum, sapiente error quae consequatur aperiam
-        ipsam quisquam perferendis illo eos id architecto accusantium.
-      </span>
+      <div class="profile__middle__description">
+        <span>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto maxime esse sint
+          quam, corporis rerum facilis dolorum, sapiente error quae consequatur aperiam
+          ipsam quisquam perferendis illo eos id architecto accusantium.
+        </span>
+      </div>
     </div>
   </div>
 </template>
@@ -24,16 +37,21 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
+
   justify-content: center;
   padding: 1rem;
   gap: 1.5rem;
 
   &__header {
+  }
+
+  &__middle {
+    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.8rem;
+    justify-content: center;
+    gap: 0.6rem;
 
     figure {
       width: 200px;
@@ -42,14 +60,16 @@
       background: #cdcdcd;
     }
 
-    span {
+    .name {
       font-weight: 600;
       font-size: 1.5rem;
     }
-  }
-  &__body {
-    text-align: center;
-    max-width: 70%;
+
+    &__description {
+      margin-top: 1rem;
+      text-align: center;
+      max-width: 70%;
+    }
   }
 }
 </style>
