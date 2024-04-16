@@ -70,7 +70,7 @@ watch(search, (nv) => {
               <span>{{ item.name }}</span>
             </div>
             <div class="right">
-              <Button size="small" type="button" icon="pi pi-check" outlined />
+              <Button size="small" type="button" icon="pi pi-check"  severity="info" outlined />
 
               <Button
                 size="small"

@@ -3,17 +3,14 @@
 <template>
   <div class="profile">
     <div class="profile__header">
-      <figure></figure>
-      <span>Usuário da Silva Sauro</span>
-      <small>fulano@fulanoteste.com</small>
-    </div>
-
-    <div class="profile__body">
-      <span>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto maxime esse sint
-        quam, corporis rerum facilis dolorum, sapiente error quae consequatur aperiam
-        ipsam quisquam perferendis illo eos id architecto accusantium.
-      </span>
+      <figure>
+        <img src="/img/home-scream-2.jpg" alt="Pessoa falando ao megafone" />
+      </figure>
+      <span>Inicie sua jornada de comunicação aqui! :)</span>
+      <small
+        >Conectando você com o mundo: Inicie uma nova conversa e deixe suas mensagens
+        voarem livremente!</small
+      >
     </div>
   </div>
 </template>
@@ -36,15 +33,20 @@
     gap: 0.8rem;
 
     figure {
-      width: 200px;
-      height: 200px;
+      width: 280px;
+      height: 280px;
       border-radius: 50%;
       background: #cdcdcd;
+
+      img{
+        width: 100%;
+        height: 100%;
+      }
     }
 
     span {
-      font-weight: 600;
-      font-size: 1.5rem;
+      font-weight: 700;
+      font-size: 1.35rem;
     }
   }
   &__body {

@@ -25,7 +25,7 @@ import TheInput from "../atoms/TheInput.vue";
     </div>
 
     <div class="modal--action">
-      <Button label="Adicionar" />
+      <Button label="Adicionar"  severity="info" />
     </div>
   </div>
 </template>

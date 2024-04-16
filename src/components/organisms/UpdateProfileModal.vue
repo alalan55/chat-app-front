@@ -46,7 +46,7 @@ import Button from "primevue/button";
     </div>
 
     <div class="modal__footer">
-      <Button label="Atualizar"  outlined>
+      <Button label="Atualizar"   severity="info">
         <template #icon>
           <i class="pi pi-save" style="margin-right: .5rem;"></i>
         </template>

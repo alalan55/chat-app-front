@@ -6,6 +6,7 @@ import AddFriendModal from "@/components/organisms/AddFriendModal.vue";
 import FriendsRequestModal from "../organisms/FriendsRequestModal.vue";
 import UserProfile from "../organisms/UserProfile.vue";
 import UpdateProfileModal from "../organisms/UpdateProfileModal.vue";
+import StartupModal from "../organisms/StartupModal.vue";
 import Dialog from "primevue/dialog";
 
 const friend_dialog = ref(false);
@@ -41,7 +42,8 @@ const chooseOptionModal = (e) => {
 
     <section class="container__content">
       <!-- <h2>Novidades em breve😆!</h2> -->
-      <UserProfile />
+      <!-- <UserProfile /> -->
+      <StartupModal/>
     </section>
 
     <section class="container__chat">
