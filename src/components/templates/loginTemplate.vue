@@ -57,7 +57,7 @@ const login = async () => {
           <TheInput
             v-model="form.email"
             placeholder="Insira seu e-mail"
-            :icon-left="'pi pi-user'"
+            :icon-left="'pi pi-at'"
             style="margin-top: .8rem"
           />
         </label>
