@@ -77,14 +77,15 @@ import Button from "primevue/button";
   &--action {
     display: flex;
     align-items: center;
+    justify-content: center;
     button {
-      width: 30%;
-      margin: 0 auto;
-      padding: 0.7rem 0.5rem;
-      border: none;
-      font-weight: 700;
-      font-size: 0.75rem;
-      cursor: pointer;
+      // width: 30%;
+      // margin: 0 auto;
+      // padding: 0.7rem 0.5rem;
+      // border: none;
+      // font-weight: 700;
+      // font-size: 0.75rem;
+      // cursor: pointer;
     }
   }
 }
