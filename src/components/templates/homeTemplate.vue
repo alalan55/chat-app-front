@@ -37,8 +37,6 @@ const chooseOptionModal = (e) => {
 };
 
 const setCurrentComponent = () => (current_component_screen.value = "UserProfile");
-
-const test = () => undo();
 </script>
 
 <template>
@@ -53,7 +51,9 @@ const test = () => undo();
     </section>
 
     <section class="container__content">
-      <component :is="pages[current_component_screen]" @back-previous-page="test" />
+      <Transition name="fade" mode="out-in">
+        <component :is="pages[current_component_screen]" @back-previous-page="undo()" />
+      </Transition>
     </section>
 
     <section class="container__chat">
@@ -114,6 +114,16 @@ const test = () => undo();
 
 <style lang="scss" scoped>
 @import "@/assets/main.scss";
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
 
 .container {
   border-radius: 13px;

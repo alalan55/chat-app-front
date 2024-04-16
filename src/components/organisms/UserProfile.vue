@@ -7,11 +7,12 @@ const emit = defineEmits(["back-previous-page"]);
   <div class="profile">
     <div class="profile__header">
       <Button
-        icon="pi pi-arrow-left"
-        aria-label="Filter"
         size="small"
-        outlined
+        icon="pi pi-arrow-left"
         severity="info"
+        text
+        rounded
+        aria-label="Cancel"
         @click="emit('back-previous-page')"
       />
     </div>
@@ -42,22 +43,20 @@ const emit = defineEmits(["back-previous-page"]);
   padding: 1rem;
   gap: 1.5rem;
 
-  &__header {
-  }
-
   &__middle {
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.6rem;
+    gap: 0.3rem;
 
     figure {
       width: 200px;
       height: 200px;
       border-radius: 50%;
       background: #cdcdcd;
+      margin-bottom: 1.2rem;
     }
 
     .name {
