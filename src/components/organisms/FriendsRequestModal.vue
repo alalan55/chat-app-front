@@ -70,10 +70,15 @@ watch(search, (nv) => {
               <span>{{ item.name }}</span>
             </div>
             <div class="right">
-              <Button size="small" type="button" icon="pi pi-check" raised  />
-   
-              <Button  size="small" type="button"  icon="pi pi-times" severity="danger"  raised  />
+              <Button size="small" type="button" icon="pi pi-check" outlined />
 
+              <Button
+                size="small"
+                type="button"
+                icon="pi pi-times"
+                severity="danger"
+                outlined
+              />
             </div>
           </div>
         </template>
@@ -111,7 +116,7 @@ watch(search, (nv) => {
     flex: 1;
     overflow: auto;
     @include trackScrollBar;
-    padding-bottom: .9rem;
+    padding-bottom: 0.9rem;
 
     &__list {
       display: flex;
@@ -159,10 +164,10 @@ watch(search, (nv) => {
           }
         }
 
-        .right{
+        .right {
           display: flex;
           align-items: center;
-          gap: .5rem;
+          gap: 0.5rem;
         }
 
         &:hover {

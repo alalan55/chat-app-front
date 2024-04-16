@@ -172,6 +172,11 @@ watch(search, (nv) => {
         }
       }
     }
+    .right {
+      i {
+        cursor: pointer;
+      }
+    }
   }
 
   &__body {

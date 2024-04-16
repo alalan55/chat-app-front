@@ -19,6 +19,11 @@ const items = ref([
         icon: "pi pi-upload",
         type: 1,
       },
+      {
+        label: "Editar perfil",
+        icon: "pi pi-user-edit",
+        type: 2,
+      },
     ],
   },
 ]);

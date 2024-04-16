@@ -4,11 +4,14 @@ import HomeChatList from "@/components/molecules/HomeChatList.vue";
 import FriendsListModal from "@/components/organisms/FriendsListModal.vue";
 import AddFriendModal from "@/components/organisms/AddFriendModal.vue";
 import FriendsRequestModal from "../organisms/FriendsRequestModal.vue";
+import UserProfile from "../organisms/UserProfile.vue";
+import UpdateProfileModal from "../organisms/UpdateProfileModal.vue";
 import Dialog from "primevue/dialog";
 
 const friend_dialog = ref(false);
 const friend_request_dialog = ref(false);
 const add_friend_dialog = ref(false);
+const update_profile_dialog = ref(false);
 
 import { ref } from "vue";
 
@@ -22,6 +25,7 @@ const startConversation = (user) => {
 
 const chooseOptionModal = (e) => {
   if (e.type == 0) friend_request_dialog.value = true;
+  if (e.type == 2) update_profile_dialog.value = true;
 };
 </script>
 
@@ -36,12 +40,24 @@ const chooseOptionModal = (e) => {
     </section>
 
     <section class="container__content">
-      <h2>Novidades em breve😆!</h2>
+      <!-- <h2>Novidades em breve😆!</h2> -->
+      <UserProfile />
     </section>
 
     <section class="container__chat">
       <HomeChatList />
     </section>
+
+    <Dialog
+      v-model:visible="update_profile_dialog"
+      modal
+      :style="{ width: '70vw' }"
+      :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+    >
+      <template #container>
+        <UpdateProfileModal @close="update_profile_dialog = false" />
+      </template>
+    </Dialog>
 
     <Dialog
       v-model:visible="friend_dialog"
