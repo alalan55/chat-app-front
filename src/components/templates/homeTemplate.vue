@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from "vue";
 import HomeChatHeader from "@/components/molecules/HomeChatHeader.vue";
 import HomeChatList from "@/components/molecules/HomeChatList.vue";
 import FriendsListModal from "@/components/organisms/FriendsListModal.vue";
@@ -13,8 +14,12 @@ const friend_dialog = ref(false);
 const friend_request_dialog = ref(false);
 const add_friend_dialog = ref(false);
 const update_profile_dialog = ref(false);
+const current_component_screen = ref("StartupModal");
 
-import { ref } from "vue";
+const pages = {
+  UserProfile,
+  StartupModal,
+};
 
 const openFriendsListModal = () => {
   friend_dialog.value = true;
@@ -28,6 +33,8 @@ const chooseOptionModal = (e) => {
   if (e.type == 0) friend_request_dialog.value = true;
   if (e.type == 2) update_profile_dialog.value = true;
 };
+
+const set_current_component = () => (current_component_screen.value = "UserProfile");
 </script>
 
 <template>
@@ -37,13 +44,12 @@ const chooseOptionModal = (e) => {
         @open-friends-list="openFriendsListModal"
         @add-friend="add_friend_dialog = true"
         @open-option-dialog="chooseOptionModal"
+        @open-profile="set_current_component"
       />
     </section>
 
     <section class="container__content">
-      <!-- <h2>Novidades em breve😆!</h2> -->
-      <!-- <UserProfile /> -->
-      <StartupModal/>
+      <component :is="pages[current_component_screen]" />
     </section>
 
     <section class="container__chat">

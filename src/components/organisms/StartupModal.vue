@@ -6,7 +6,7 @@
       <figure>
         <img src="/img/home-scream-2.jpg" alt="Pessoa falando ao megafone" />
       </figure>
-      <span>Inicie sua jornada de comunicação aqui! :)</span>
+      <span>Inicie sua jornada de comunicação aqui! </span>
       <small
         >Conectando você com o mundo: Inicie uma nova conversa e deixe suas mensagens
         voarem livremente!</small
@@ -38,7 +38,7 @@
       border-radius: 50%;
       background: #cdcdcd;
 
-      img{
+      img {
         width: 100%;
         height: 100%;
       }
@@ -47,6 +47,7 @@
     span {
       font-weight: 700;
       font-size: 1.35rem;
+      color: #2a3338;
     }
   }
   &__body {
