@@ -1,3 +1,7 @@
+<script setup>
+import TheInput from "../atoms/TheInput.vue";
+</script>
+
 <template>
   <div class="wrapper">
     <div class="wrapper__profile">
@@ -17,12 +21,10 @@
       </div>
     </div>
     <div class="wrapper__input">
-      <input type="text" placeholder="Pesquisar" />
+      <TheInput :icon-left="'pi pi-search'" placeholder="Pesquisar" />
     </div>
   </div>
 </template>
-
-<script setup></script>
 
 <style lang="scss" scoped>
 .wrapper {
@@ -55,20 +57,6 @@
   }
   &__input {
     padding: 0.5rem 0.8rem;
-    input {
-      width: 100%;
-      border-radius: 10px;
-      border: none;
-      background: #edf2f6;
-      flex: 3;
-      // padding: 1rem 25px 1rem 2.5rem;
-      padding: 0.8rem;
-      font-weight: 600;
-      color: #3f3f3f;
-      &:focus {
-        outline: none;
-      }
-    }
   }
 }
 </style>

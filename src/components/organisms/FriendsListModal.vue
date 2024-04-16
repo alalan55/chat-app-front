@@ -1,5 +1,6 @@
 <script setup>
 import { ref, watch } from "vue";
+import TheInput from "../atoms/TheInput.vue";
 
 const search = ref("");
 const filtered = ref([]);
@@ -128,7 +129,11 @@ watch(search, (nv) => {
     </div>
 
     <div class="modal__middle">
-      <input v-model="search" type="text" placeholder="Pesquisar nome" />
+      <TheInput
+        v-model="search"
+        :icon-left="'pi pi-search'"
+        placeholder="Pesquisar nome"
+      />
     </div>
 
     <div class="modal__body">
@@ -165,21 +170,6 @@ watch(search, (nv) => {
           font-size: 1.2rem;
           font-weight: 600;
         }
-      }
-    }
-  }
-
-  &__middle {
-    input {
-      width: 100%;
-      border-radius: 10px;
-      border: none;
-      background: #eff2f5;
-      padding: 0.8rem;
-      font-weight: 600;
-      color: #3f3f3f;
-      &:focus {
-        outline: none;
       }
     }
   }
