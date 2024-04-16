@@ -1,5 +1,6 @@
 <script setup>
 import Button from "primevue/button";
+import TheInput from "../atoms/TheInput.vue";
 </script>
 
 <template>
@@ -20,7 +21,7 @@ import Button from "primevue/button";
     </div>
 
     <div class="modal__body">
-      <input type="text" placeholder="Friend ID do usuário" />
+      <TheInput placeholder="Friend ID do usuário" />
     </div>
 
     <div class="modal--action">
@@ -60,18 +61,6 @@ import Button from "primevue/button";
   }
 
   &__body {
-    input {
-      width: 100%;
-      border-radius: 10px;
-      border: none;
-      background: #eff2f5;
-      padding: 0.8rem;
-      font-weight: 600;
-      color: #3f3f3f;
-      &:focus {
-        outline: none;
-      }
-    }
   }
 
   &--action {
@@ -79,13 +68,6 @@ import Button from "primevue/button";
     align-items: center;
     justify-content: center;
     button {
-      // width: 30%;
-      // margin: 0 auto;
-      // padding: 0.7rem 0.5rem;
-      // border: none;
-      // font-weight: 700;
-      // font-size: 0.75rem;
-      // cursor: pointer;
     }
   }
 }
