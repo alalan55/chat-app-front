@@ -5,6 +5,7 @@ import { useUserStore } from "@/stores/user";
 import { useToast } from "primevue/usetoast";
 import http from "@/services/axios";
 import Button from "primevue/button";
+import TheInput from "../atoms/TheInput.vue";
 
 const form = reactive({ email: "", password: "" });
 const loading = ref(false);
@@ -46,10 +47,6 @@ const login = async () => {
     <Toast />
     <div class="login__card">
       <div class="login__card__header">
-        <!-- <figure>
-          <img src="/img/logo.png" alt="Logo" />
-        </figure> -->
-
         <strong>CHATAPP</strong>
         <small>Preencha com seu e-mail e senha para fazer login</small>
       </div>
@@ -57,31 +54,24 @@ const login = async () => {
       <form @submit.prevent class="login__card__body">
         <label>
           E-mail
-          <div>
-            <figure class="left-image">
-              <img src="/icons/user-icon.svg" alt="Ícone de usuário" />
-            </figure>
-            <input v-model="form.email" type="text" placeholder="Insira o seu e-mail" />
-          </div>
+          <TheInput
+            v-model="form.email"
+            placeholder="Insira seu e-mail"
+            :icon-left="'pi pi-at'"
+            style="margin-top: .8rem"
+          />
         </label>
         <label>
           Senha
-          <div>
-            <figure class="left-image">
-              <img src="/icons/lock-icon.svg" alt="Ícone de cadeado" />
-            </figure>
-            <input
-              v-model="form.password"
-              :type="`${!showMessage ? 'password' : 'text'}`"
-              placeholder="Digite a sua senha"
-            />
-            <figure class="right-image" @click="showMessage = !showMessage">
-              <img
-                :src="`/icons/${!showMessage ? 'eye-off-icon' : 'eye-open-icon'}.svg`"
-                alt="Ícone de usuário"
-              />
-            </figure>
-          </div>
+          <TheInput
+            v-model="form.password"
+            :icon-left="'pi pi-lock'"
+            :icon-right="!showMessage ? 'pi pi-eye-slash' : 'pi pi-eye'"
+            :type="`${!showMessage ? 'password' : 'text'}`"
+            style="margin-top: .8rem"
+            placeholder="Insira sua senha"
+            @right-icon-click="showMessage = !showMessage"
+          />
         </label>
         <Button
           :disabled="loading"
@@ -296,66 +286,6 @@ const login = async () => {
         color: #3a3535;
       }
 
-      div {
-        position: relative;
-        padding: 0 !important;
-        margin-top: 0.8rem;
-
-        .left-image {
-          position: absolute;
-          width: 30px;
-          height: 30px;
-          top: 50%;
-          left: 22px;
-
-          transform: translate(-50%, -50%);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: 0.3s ease;
-
-          img {
-            width: 80%;
-            height: 80%;
-            object-fit: contain;
-          }
-        }
-        .right-image {
-          position: absolute;
-          width: 30px;
-          height: 30px;
-          top: 50%;
-          right: 0;
-          transform: translate(-50%, -50%);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-
-          img {
-            width: 80%;
-            height: 80%;
-            object-fit: contain;
-          }
-        }
-        input {
-          width: 100%;
-          border-radius: 10px;
-          border: none;
-          background: #edf2f6;
-          flex: 3;
-          padding: 1rem 25px 1rem 2.5rem;
-          font-weight: 600;
-          color: #3f3f3f;
-          &:focus {
-            outline: none;
-          }
-
-          // @media(max-width: 750px){
-          //   padding: 1rem 2.4rem;
-          // }
-        }
-      }
       button {
         width: 30%;
         margin: 0 auto;

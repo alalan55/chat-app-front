@@ -4,6 +4,7 @@ import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import Button from "primevue/button";
 import http from "@/services/axios";
+import TheInput from "../atoms/TheInput.vue";
 
 const router = useRouter();
 const showMessage = ref(false);
@@ -56,69 +57,49 @@ const createUser = async () => {
       <form @submit.prevent class="login__card__body">
         <label>
           E-mail
-          <div>
-            <figure class="left-image">
-              <img src="/icons/user-icon.svg" alt="Ícone de usuário" />
-            </figure>
-            <input
-              v-model="new_user.email"
-              type="text"
-              placeholder="Insira o seu e-mail"
-            />
-          </div>
+
+          <TheInput
+            v-model="new_user.email"
+            placeholder="Insira seu e-mail"
+            :icon-left="'pi pi-at'"
+            style="margin-top: 0.8rem"
+          />
         </label>
         <label>
           Nome
-          <div>
-            <figure class="left-image">
-              <img src="/icons/user-icon.svg" alt="Ícone de usuário" />
-            </figure>
-            <input v-model="new_user.name" type="text" placeholder="Insira o seu nome" />
-          </div>
+          <TheInput
+            v-model="new_user.name"
+            placeholder="Insira seu e-mail"
+            :icon-left="'pi pi-user'"
+            style="margin-top: 0.8rem"
+          />
         </label>
         <label>
           Senha
-          <div>
-            <figure class="left-image">
-              <img src="/icons/lock-icon.svg" alt="Ícone de cadeado" />
-            </figure>
-            <input
-              v-model="new_user.password"
-              :type="`${!showMessage ? 'password' : 'text'}`"
-              placeholder="Digite a sua senha"
-            />
-            <figure class="right-image" @click="showMessage = !showMessage">
-              <img
-                :src="`/icons/${!showMessage ? 'eye-off-icon' : 'eye-open-icon'}.svg`"
-                alt="Ícone de usuário"
-              />
-            </figure>
-          </div>
+
+          <TheInput
+            v-model="new_user.password"
+            :icon-left="'pi pi-lock'"
+            :icon-right="!showMessage ? 'pi pi-eye-slash' : 'pi pi-eye'"
+            :type="`${!showMessage ? 'password' : 'text'}`"
+            style="margin-top: 0.8rem"
+            placeholder="Insira sua senha"
+            @right-icon-click="showMessage = !showMessage"
+          />
         </label>
 
         <label>
           Confirmação de senha
-          <div>
-            <figure class="left-image">
-              <img src="/icons/lock-icon.svg" alt="Ícone de cadeado" />
-            </figure>
-            <input
-              v-model="confirmation_pawword"
-              :type="`${!showMessageConfirmation ? 'password' : 'text'}`"
-              placeholder="Digite a sua senha"
-            />
-            <figure
-              class="right-image"
-              @click="showMessageConfirmation = !showMessageConfirmation"
-            >
-              <img
-                :src="`/icons/${
-                  !showMessageConfirmation ? 'eye-off-icon' : 'eye-open-icon'
-                }.svg`"
-                alt="Ícone de usuário"
-              />
-            </figure>
-          </div>
+
+          <TheInput
+            v-model="confirmation_pawword"
+            :icon-left="'pi pi-lock'"
+            :icon-right="!showMessage ? 'pi pi-eye-slash' : 'pi pi-eye'"
+            :type="`${!showMessageConfirmation ? 'password' : 'text'}`"
+            style="margin-top: 0.8rem"
+            placeholder="Insira sua senha novamente"
+            @right-icon-click="showMessageConfirmation = !showMessageConfirmation"
+          />
         </label>
         <Button
           :disabled="loading"
@@ -306,67 +287,6 @@ const createUser = async () => {
         font-weight: 600;
         font-size: 0.75rem;
         color: #3a3535;
-      }
-
-      div {
-        position: relative;
-        padding: 0 !important;
-        margin-top: 0.8rem;
-
-        .left-image {
-          position: absolute;
-          width: 30px;
-          height: 30px;
-          top: 50%;
-          left: 22px;
-
-          transform: translate(-50%, -50%);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: 0.3s ease;
-
-          img {
-            width: 80%;
-            height: 80%;
-            object-fit: contain;
-          }
-        }
-        .right-image {
-          position: absolute;
-          width: 30px;
-          height: 30px;
-          top: 50%;
-          right: 0;
-          transform: translate(-50%, -50%);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-
-          img {
-            width: 80%;
-            height: 80%;
-            object-fit: contain;
-          }
-        }
-        input {
-          width: 100%;
-          border-radius: 10px;
-          border: none;
-          background: #edf2f6;
-          flex: 3;
-          padding: 1rem 25px 1rem 2.5rem;
-          font-weight: 600;
-          color: #3f3f3f;
-          &:focus {
-            outline: none;
-          }
-
-          // @media(max-width: 750px){
-          //   padding: 1rem 2.4rem;
-          // }
-        }
       }
       button {
         width: 30%;
