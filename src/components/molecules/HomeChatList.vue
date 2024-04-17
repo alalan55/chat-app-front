@@ -138,7 +138,7 @@ const mock_users = [
 
 <style lang="scss" scoped>
 .chat-list {
-  height: 100%;
+  height: auto;
 
   &__list {
     padding: 0.6rem;

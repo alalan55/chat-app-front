@@ -32,6 +32,7 @@ const toggleOptionsMenu = (event) => {
 const toggleEmoji = () => (show_emojis.value = !show_emojis.value);
 
 const onSelectEmoji = (emoji) => {
+  console.log(emoji);
   message.value += emoji.i;
   toggleEmoji();
 };
@@ -91,7 +92,7 @@ const onSelectEmoji = (emoji) => {
 
     <div class="profile__body">
       <ul>
-        <li v-for="item in 10" :key="item">
+        <li v-for="item in 100" :key="item">
           <span>ALAN DE OLIVEIRA FERREIRA {{ item }}</span>
         </li>
       </ul>
@@ -119,13 +120,6 @@ const onSelectEmoji = (emoji) => {
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  // padding: 1rem;
-  gap: 1.2rem;
-
-  & > div {
-    // border: 1px solid red;
-  }
 
   &__header {
     padding: 1.5rem;
@@ -170,20 +164,18 @@ const onSelectEmoji = (emoji) => {
     border: 1px solid #b8b6b6;
     margin: 0 1rem;
     border-radius: 5px;
-
-    overflow: auto;
-    min-height: 350px;
+    overflow-y: auto;
     @include trackScrollBar;
+    margin-top: 1rem;
   }
 
   &__footer {
     height: 70px;
-    padding: 1rem;
+    padding: 0 1rem;
     display: flex;
     align-items: center;
 
     .inpt {
-      // position: relative;
       flex: 1;
 
       .emoji-finder {
@@ -191,6 +183,10 @@ const onSelectEmoji = (emoji) => {
         bottom: 90%;
       }
     }
+  }
+
+  & > div {
+    // border: 2px solid red;
   }
 }
 </style>

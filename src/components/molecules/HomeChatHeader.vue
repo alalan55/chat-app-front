@@ -119,5 +119,6 @@ const toggleOptionsMenu = (event) => {
   &__input {
     padding: 0.5rem 0.8rem;
   }
+
 }
 </style>

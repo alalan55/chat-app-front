@@ -137,7 +137,7 @@ const openCHat = () => (current_component_screen.value = "HomeChat");
   height: 100%;
   display: grid;
   grid-template-columns: 1fr 3fr; /* Uma coluna para o profile e outra para o container */
-  grid-template-rows: auto auto auto; /* Três linhas automáticas */
+  grid-template-rows: 160px auto auto; /* Três linhas automáticas */
 
   &__profile {
     grid-column: 1; /* A área profile começa na primeira coluna */
@@ -148,9 +148,7 @@ const openCHat = () => (current_component_screen.value = "HomeChat");
   &__content {
     grid-column: 2 / span 1; /* O container começa na segunda coluna */
     grid-row: 1 / span 3; /* E ocupa três linhas */
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    overflow-y: auto;
   }
   &__chat {
     grid-column: 1; /* O chat também começa na primeira coluna */
