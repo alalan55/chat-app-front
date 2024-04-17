@@ -24,6 +24,11 @@ const items = ref([
         icon: "pi pi-user-edit",
         type: 2,
       },
+      {
+        label: "Logout",
+        icon: "pi pi-sign-out",
+        type: 3,
+      },
     ],
   },
 ]);

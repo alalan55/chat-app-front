@@ -9,7 +9,7 @@ export const useUserStore = defineStore('user', {
     setCurrentUser(payload) {
       this.user = payload.content
       this.token = payload.token
-      localStorage.setItem('user', JSON.stringify(payload))
+      localStorage.setItem('user', JSON.stringify(payload.content))
       localStorage.setItem('token', payload.token)
     }
   },
