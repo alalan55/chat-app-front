@@ -90,17 +90,11 @@ const onSelectEmoji = (emoji) => {
     </div>
 
     <div class="profile__body">
-      <figure></figure>
-      <span class="name">CHAAAAAT</span>
-      <small>fulano@fulanoteste.com</small>
-
-      <div class="profile__middle__description">
-        <span>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto maxime esse sint
-          quam, corporis rerum facilis dolorum, sapiente error quae consequatur aperiam
-          ipsam quisquam perferendis illo eos id architecto accusantium.
-        </span>
-      </div>
+      <ul>
+        <li v-for="item in 10" :key="item">
+          <span>ALAN DE OLIVEIRA FERREIRA {{ item }}</span>
+        </li>
+      </ul>
     </div>
 
     <div class="profile__footer">
@@ -119,6 +113,7 @@ const onSelectEmoji = (emoji) => {
 </template>
 
 <style lang="scss" scoped>
+@import "@/assets/main.scss";
 .profile {
   width: 100%;
   height: 100%;
@@ -126,7 +121,11 @@ const onSelectEmoji = (emoji) => {
   flex-direction: column;
   justify-content: center;
   // padding: 1rem;
-  gap: 1.5rem;
+  gap: 1.2rem;
+
+  & > div {
+    // border: 1px solid red;
+  }
 
   &__header {
     padding: 1.5rem;
@@ -168,30 +167,13 @@ const onSelectEmoji = (emoji) => {
 
   &__body {
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.3rem;
+    border: 1px solid #b8b6b6;
+    margin: 0 1rem;
+    border-radius: 5px;
 
-    figure {
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      background: #cdcdcd;
-      margin-bottom: 1.2rem;
-    }
-
-    .name {
-      font-weight: 600;
-      font-size: 1.5rem;
-    }
-
-    &__description {
-      margin-top: 1rem;
-      text-align: center;
-      max-width: 70%;
-    }
+    overflow: auto;
+    min-height: 350px;
+    @include trackScrollBar;
   }
 
   &__footer {
