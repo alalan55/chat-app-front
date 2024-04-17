@@ -3,7 +3,7 @@ import { ref } from "vue";
 import TheInput from "../atoms/TheInput.vue";
 import Menu from "primevue/menu";
 
-const emit = defineEmits(["openOptionDialog", 'open-profile']);
+const emit = defineEmits(["openOptionDialog", "open-profile"]);
 const menu = ref();
 const items = ref([
   {
@@ -119,6 +119,5 @@ const toggleOptionsMenu = (event) => {
   &__input {
     padding: 0.5rem 0.8rem;
   }
-
 }
 </style>

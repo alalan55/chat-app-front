@@ -162,8 +162,9 @@ const messages_mock = [
       <Button
         icon="pi pi-face-smile"
         severity="secondary"
-        outlined=""
+        outlined
         rounded
+        raised
         aria-label="Open"
         @click="toggleEmoji"
       />

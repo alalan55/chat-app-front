@@ -148,7 +148,7 @@ const openCHat = () => (current_component_screen.value = "HomeChat");
   &__content {
     grid-column: 2 / span 1; /* O container começa na segunda coluna */
     grid-row: 1 / span 3; /* E ocupa três linhas */
-    overflow-y: auto;
+    overflow: auto;
   }
   &__chat {
     grid-column: 1; /* O chat também começa na primeira coluna */
