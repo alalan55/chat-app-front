@@ -1,9 +1,14 @@
 <script setup>
 import { ref, watch } from "vue";
-// import TheInput from "../atoms/TheInput.vue";
+
+import { useToast } from "primevue/usetoast";
+import http from "@/services/axios";
 import Button from "primevue/button";
+
+const toast = useToast();
 const search = ref("");
 const filtered = ref([]);
+const friends_requests = ref([]);
 
 const mock_users = [
   {
@@ -33,11 +38,27 @@ const mock_users = [
   },
 ];
 
+const getFriendsRequest = async () => {
+  try {
+    const { data } = await http.get("friends-request");
+    friends_requests.value = data.content;
+  } catch (error) {
+    toast.add({
+      severity: "error",
+      summary: "Falha",
+      detail: "Falha ao buscar pedidos de amigos",
+      life: 3000,
+    });
+  }
+};
+
 watch(search, (nv) => {
   filtered.value = mock_users.filter((user) =>
     user.name.toLocaleLowerCase().includes(nv.toLocaleLowerCase())
   );
 });
+
+getFriendsRequest();
 </script>
 
 <template>
@@ -63,14 +84,23 @@ watch(search, (nv) => {
 
     <div class="modal__body">
       <div class="modal__body__list">
-        <template v-for="(item, i) in search.length ? filtered : mock_users" :key="i">
+        <template
+          v-for="item in search.length ? filtered : friends_requests"
+          :key="item.id"
+        >
           <div class="friend" @click="$emit('start-conversation', item)">
             <div class="left">
               <figure></figure>
-              <span>{{ item.name }}</span>
+              <span>{{ item.applicant_shared_id }}</span>
             </div>
             <div class="right">
-              <Button size="small" type="button" icon="pi pi-check"  severity="info" outlined />
+              <Button
+                size="small"
+                type="button"
+                icon="pi pi-check"
+                severity="info"
+                outlined
+              />
 
               <Button
                 size="small"
