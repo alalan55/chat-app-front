@@ -1,5 +1,7 @@
 <script setup>
 import { ref } from "vue";
+
+import Button from "primevue/button";
 import Menu from "primevue/menu";
 import TheInput from "../atoms/TheInput.vue";
 import EmojiPicker from "vue3-emoji-picker";
@@ -32,10 +34,64 @@ const toggleOptionsMenu = (event) => {
 const toggleEmoji = () => (show_emojis.value = !show_emojis.value);
 
 const onSelectEmoji = (emoji) => {
-  console.log(emoji);
   message.value += emoji.i;
   toggleEmoji();
 };
+
+const messages_mock = [
+  {
+    id: 0,
+    message: "Fala meu amigo, como é que você está?🤣",
+    sender: 0,
+  },
+  {
+    id: 2,
+    message: "Tudo na pax meu manooo",
+    sender: 1,
+  },
+  {
+    id: 2,
+    message: "E contigo?",
+    sender: 1,
+  },
+  {
+    id: 3,
+    message: "Que bom mano, eu estou bem também!!",
+    sender: 0,
+  },
+  {
+    id: 4,
+    message: "Como tem ido aí nas coisas mano?",
+    sender: 0,
+  },
+  {
+    id: 5,
+    message: "Todos bem por aí?",
+    sender: 0,
+  },
+  {
+    id: 6,
+    message:
+      "por aqui tudo safe bro, minha mãe está bem graças a Deus, trabalho está fluindo legal, então não posso reclamar de nada não, só agradecer mesmo!🤗",
+    sender: 1,
+  },
+  {
+    id: 7,
+    message: "Por aí mano?",
+    sender: 1,
+  },
+  {
+    id: 8,
+    message: "Conseguiu resolver aqueles B.O's do trampo que voce tinha me falado hahah?",
+    sender: 1,
+  },
+  {
+    id: 9,
+    message:
+      "Pode acreditar que sim mano, foi difícil para um caramba kkkk mas no fim deu tudo certo, graças a Deus",
+    sender: 0,
+  },
+];
 </script>
 
 <template>
@@ -92,23 +148,32 @@ const onSelectEmoji = (emoji) => {
 
     <div class="profile__body">
       <ul>
-        <li v-for="item in 100" :key="item">
-          <span>ALAN DE OLIVEIRA FERREIRA {{ item }}</span>
-        </li>
+        <template v-for="item in messages_mock" :key="item.id">
+          <li :class="{ is_me: item.sender == 0 }" class="message">
+            <div class="message__box">
+              <span>{{ item.message }}</span>
+            </div>
+          </li>
+        </template>
       </ul>
     </div>
 
     <div class="profile__footer">
-      <TheInput
-        v-model="message"
-        class="inpt"
-        icon-left="pi pi-face-smile"
-        @left-icon-click="toggleEmoji"
-      >
-        <template v-if="show_emojis" #custom-info>
-          <EmojiPicker :native="true" class="emoji-finder" @select="onSelectEmoji" />
-        </template>
-      </TheInput>
+      <Button
+        icon="pi pi-face-smile"
+        severity="secondary"
+        outlined=""
+        rounded
+        aria-label="Open"
+        @click="toggleEmoji"
+      />
+      <EmojiPicker
+        v-show="show_emojis"
+        :native="true"
+        class="emoji-finder"
+        @select="onSelectEmoji"
+      />
+      <TheInput v-model="message" class="inpt" placeholder="Digite uma mensagem" />
     </div>
   </div>
 </template>
@@ -161,12 +226,36 @@ const onSelectEmoji = (emoji) => {
 
   &__body {
     flex: 1;
-    border: 1px solid #b8b6b6;
-    margin: 0 1rem;
+    // border: 1px solid #b8b6b6;
+    // margin: 0 1rem;
     border-radius: 5px;
     overflow-y: auto;
     @include trackScrollBar;
-    margin-top: 1rem;
+    // margin-top: 1rem;
+    padding: 0.5rem 1rem;
+
+    ul {
+      padding: 0;
+      .message {
+        list-style: none;
+        margin-bottom: 1rem;
+
+        &__box {
+          max-width: 45%;
+          display: inline-block;
+          border-radius: 8px;
+          padding: 0.6rem 1rem;
+          background: #ebebeb;
+        }
+      }
+
+      .is_me {
+        text-align: right;
+        .message__box {
+          background: #c1e5f5;
+        }
+      }
+    }
   }
 
   &__footer {
@@ -174,14 +263,15 @@ const onSelectEmoji = (emoji) => {
     padding: 0 1rem;
     display: flex;
     align-items: center;
+    position: relative;
+    gap: 0.5rem;
 
+    .emoji-finder {
+      position: absolute;
+      bottom: 90%;
+    }
     .inpt {
       flex: 1;
-
-      .emoji-finder {
-        position: absolute;
-        bottom: 90%;
-      }
     }
   }
 
