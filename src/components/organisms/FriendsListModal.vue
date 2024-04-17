@@ -3,10 +3,12 @@ import { ref, watch } from "vue";
 import TheInput from "../atoms/TheInput.vue";
 import { useToast } from "primevue/usetoast";
 import http from "@/services/axios";
+import Skeleton from "primevue/skeleton";
 
+const loading = ref(false);
 const search = ref("");
 const filtered = ref([]);
-const users = ref([])
+const users = ref([]);
 const toast = useToast();
 
 // const mock_users = [
@@ -114,10 +116,13 @@ const toast = useToast();
 
 const getUsersList = async () => {
   try {
+    loading.value = true;
     const { data } = await http.get("friends");
-    users.value = data.content
+    users.value = data.content;
+    loading.value = false;
     console.log(data);
   } catch (e) {
+    loading.value = false;
     toast.add({
       severity: "error",
       summary: "Falha",
@@ -133,7 +138,7 @@ watch(search, (nv) => {
   );
 });
 
-getUsersList()
+getUsersList();
 </script>
 
 <template>
@@ -165,6 +170,23 @@ getUsersList()
             <span>{{ item.name }}</span>
           </div>
         </template>
+
+        <template v-for="item in 4" :key="item">
+          <div v-if="loading" class="friend-loading">
+            <Skeleton shape="circle" size="4rem" class="mr-2"></Skeleton>
+            <div class="align-self-center" style="flex: 1">
+              <Skeleton width="100%" class="mb-2" style="margin-bottom: 1rem"></Skeleton>
+              <Skeleton width="75%"></Skeleton>
+            </div>
+          </div>
+        </template>
+      </div>
+
+      <div
+        v-if="!users.length && !filtered.length && !loading"
+        class="modal__body__no-content"
+      >
+        <span>Nenhum usuário encontrado😬</span>
       </div>
     </div>
   </div>
@@ -251,6 +273,20 @@ getUsersList()
           -moz-box-shadow: -6px 10px 28px -12px rgba(0, 0, 0, 0.25);
           box-shadow: -6px 10px 28px -12px rgba(0, 0, 0, 0.25);
         }
+      }
+      .friend-loading {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+    }
+    &__no-content {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      span {
+        font-weight: 600;
       }
     }
   }

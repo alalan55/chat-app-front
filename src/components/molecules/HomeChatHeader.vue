@@ -3,7 +3,12 @@ import { ref } from "vue";
 import TheInput from "../atoms/TheInput.vue";
 import Menu from "primevue/menu";
 
-const emit = defineEmits(["openOptionDialog", "open-profile"]);
+const emit = defineEmits([
+  "openOptionDialog",
+  "open-profile",
+  "open-friends-list",
+  "add-friend",
+]);
 const menu = ref();
 const items = ref([
   {
@@ -43,18 +48,18 @@ const toggleOptionsMenu = (event) => {
 <template>
   <div class="wrapper">
     <div class="wrapper__profile">
-      <figure @click="$emit('open-profile')"></figure>
+      <figure @click="emit('open-profile')"></figure>
       <div class="actions">
         <i
           v-tooltip="'Nova conversa'"
           class="pi pi-users"
-          @click="$emit('open-friends-list')"
+          @click="emit('open-friends-list')"
         />
         <i v-tooltip="'Novo grupo'" class="pi pi-comments" />
         <i
           v-tooltip="'Adicionar amigo'"
           class="pi pi-user-plus"
-          @click="$emit('add-friend')"
+          @click="emit('add-friend')"
         />
         <i
           v-tooltip="'Mais opções'"
