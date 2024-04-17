@@ -1,11 +1,14 @@
 <script setup>
 import { computed } from "vue";
+
 const props = defineProps({
   placeholder: { type: String, default: null },
   iconRight: { type: String, default: null },
   iconLeft: { type: String, default: null },
   type: { type: String, default: "text" },
 });
+
+const emit = defineEmits(["right-icon-click", "left-icon-click"]);
 
 const model = defineModel();
 
@@ -30,10 +33,13 @@ const inputStyle = computed(() => {
 
 <template>
   <div class="inpt-component">
+    <slot name="custom-info"></slot>
+
     <i
       v-if="props.iconLeft"
       :class="props.iconLeft"
       class="inpt-component__left-icon"
+      @click="emit('left-icon-click')"
     ></i>
 
     <input
@@ -47,7 +53,7 @@ const inputStyle = computed(() => {
       v-if="props.iconRight"
       :class="props.iconRight"
       class="inpt-component__right-icon"
-      @click="$emit('right-icon-click')"
+      @click="emit('right-icon-click')"
     ></i>
   </div>
 </template>
@@ -64,7 +70,6 @@ const inputStyle = computed(() => {
 
   &__right-icon {
     right: 10px;
-
     transform: translate(-50%, -50%);
     cursor: pointer;
   }

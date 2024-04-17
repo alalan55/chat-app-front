@@ -9,6 +9,7 @@ import FriendsRequestModal from "../organisms/FriendsRequestModal.vue";
 import UserProfile from "../organisms/UserProfile.vue";
 import UpdateProfileModal from "../organisms/UpdateProfileModal.vue";
 import StartupModal from "../organisms/StartupModal.vue";
+import HomeChat from "../organisms/HomeChat.vue";
 import Dialog from "primevue/dialog";
 
 const friend_dialog = ref(false);
@@ -21,6 +22,7 @@ const { undo } = useRefHistory(current_component_screen);
 const pages = {
   UserProfile,
   StartupModal,
+  HomeChat,
 };
 
 const openFriendsListModal = () => {
@@ -37,6 +39,7 @@ const chooseOptionModal = (e) => {
 };
 
 const setCurrentComponent = () => (current_component_screen.value = "UserProfile");
+const openCHat = () => (current_component_screen.value = "HomeChat");
 </script>
 
 <template>
@@ -57,7 +60,7 @@ const setCurrentComponent = () => (current_component_screen.value = "UserProfile
     </section>
 
     <section class="container__chat">
-      <HomeChatList />
+      <HomeChatList @open-chat="openCHat" />
     </section>
 
     <Dialog

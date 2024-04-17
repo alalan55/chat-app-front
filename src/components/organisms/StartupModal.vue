@@ -4,13 +4,13 @@
   <div class="profile">
     <div class="profile__header">
       <figure>
-        <img src="/img/home-scream-2.jpg" alt="Pessoa falando ao megafone" />
+        <img src="/img/home-scream-3.jpg" alt="Pessoa falando ao megafone" />
       </figure>
       <span>Inicie sua jornada de comunicação aqui! </span>
-      <small
-        >Conectando você com o mundo: Inicie uma nova conversa e deixe suas mensagens
-        voarem livremente!</small
-      >
+      <small>
+        Conectando você com o mundo: Inicie uma nova conversa e deixe suas mensagens
+        voarem livremente!
+      </small>
     </div>
   </div>
 </template>

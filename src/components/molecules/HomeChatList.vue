@@ -1,6 +1,8 @@
 <script setup>
 import Badge from "primevue/badge";
 
+const emit = defineEmits(["open-chat"]);
+
 const mock_users = [
   {
     name: "Bob Taylor",
@@ -108,7 +110,12 @@ const mock_users = [
 <template>
   <div class="chat-list">
     <div class="chat-list__list">
-      <div class="item" v-for="(item, i) in mock_users" :key="i">
+      <div
+        class="item"
+        v-for="(item, i) in mock_users"
+        :key="i"
+        @click="emit('open-chat')"
+      >
         <div class="left">
           <figure></figure>
           <div class="texts">
