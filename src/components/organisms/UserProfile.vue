@@ -1,6 +1,17 @@
 <script setup>
+// IMPORTS
+import { ref } from "vue";
+import { useUserStore } from "@/stores/user";
 import Button from "primevue/button";
+
+// EMITS
 const emit = defineEmits(["back-previous-page"]);
+const message_default = ref(
+  "Em uma jornada de autodescoberta pelas encruzilhadas do destino, entretecendo sonhos e realidade em um intricado mosaico de experiências, enquanto navego pelas marés tumultuosas da vida, buscando a essência que me define e me impulsiona a transcender os limites do conhecido."
+);
+
+// VARIABLES
+const store = useUserStore();
 </script>
 
 <template>
@@ -18,14 +29,12 @@ const emit = defineEmits(["back-previous-page"]);
     </div>
     <div class="profile__middle">
       <figure></figure>
-      <span class="name">Usuário da Silva Sauro</span>
-      <small>fulano@fulanoteste.com</small>
+      <span class="name">{{ store.$current_user.name || "Nome não encontrado" }}</span>
+      <small>{{ store.$current_user.email || "E-mail não encontrado" }}</small>
 
       <div class="profile__middle__description">
         <span>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto maxime esse sint
-          quam, corporis rerum facilis dolorum, sapiente error quae consequatur aperiam
-          ipsam quisquam perferendis illo eos id architecto accusantium.
+          {{ store.$current_user.description || message_default }}
         </span>
       </div>
     </div>

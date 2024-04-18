@@ -25,7 +25,6 @@ async function addFriend() {
           info.summary = "Sucesso";
           break;
         case 204:
-          console.log("entrei");
           info.severity = "warning";
           info.summary = "Atenção";
           break;
@@ -38,7 +37,8 @@ async function addFriend() {
         life: 3000,
       });
 
-      console.log(data);
+      emit("close");
+
       loading.value = false;
     } catch (e) {
       const message = e.response.data.detail
