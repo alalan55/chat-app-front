@@ -11,6 +11,7 @@ const emit = defineEmits([
   "open-profile",
   "open-friends-list",
   "add-friend",
+  "new-group",
 ]);
 
 // VARIABLES
@@ -57,7 +58,7 @@ const toggleOptionsMenu = (event) => {
     <div class="wrapper__profile">
       <div class="box-image">
         <figure @click="emit('open-profile')"></figure>
-        <small># {{ store.$current_user.shared_id }}</small>
+        <small># {{ store.$current_user?.shared_id || "" }}</small>
       </div>
       <div class="actions">
         <i
@@ -65,7 +66,7 @@ const toggleOptionsMenu = (event) => {
           class="pi pi-users"
           @click="emit('open-friends-list')"
         />
-        <i v-tooltip="'Novo grupo'" class="pi pi-comments" />
+        <i v-tooltip="'Novo grupo'" class="pi pi-comments" @click="emit('new-group')" />
         <i
           v-tooltip="'Adicionar amigo'"
           class="pi pi-user-plus"
@@ -125,9 +126,9 @@ const toggleOptionsMenu = (event) => {
         cursor: pointer;
       }
 
-      small{
+      small {
         font-weight: 600;
-        font-size: .75rem;
+        font-size: 0.75rem;
       }
     }
 
@@ -139,7 +140,7 @@ const toggleOptionsMenu = (event) => {
         // font-size: 1.12rem;
         color: #505b6d;
         cursor: pointer;
-        font-size: .95rem;
+        font-size: 0.95rem;
       }
 
       .item-menu {

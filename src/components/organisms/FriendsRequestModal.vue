@@ -5,6 +5,8 @@ import { useToast } from "primevue/usetoast";
 import http from "@/services/axios";
 import Button from "primevue/button";
 import Skeleton from "primevue/skeleton";
+import Accordion from "primevue/accordion";
+import AccordionTab from "primevue/accordiontab";
 
 // VARIABLES
 const toast = useToast();
@@ -13,6 +15,7 @@ const loading_manage_request = ref(false);
 const search = ref("");
 const filtered = ref([]);
 const friends_requests = ref([]);
+const friends_requests_pending = ref([]);
 const mock_users = [
   {
     name: "Bob Taylor",
@@ -46,10 +49,13 @@ const getFriendsRequest = async () => {
   try {
     loading.value = true;
     const { data } = await http.get("friends-request");
-    console.log(data);
+
+    friends_requests_pending.value = data.content.filter(
+      (info) => info.friend_status == "pending"
+    );
+
     friends_requests.value = data.content;
 
-    console.log(data.content);
     loading.value = false;
   } catch (error) {
     loading.value = false;
@@ -117,7 +123,64 @@ getFriendsRequest();
 
     <div class="modal__body">
       <div class="modal__body__list">
-        <template
+        <Accordion v-if="friends_requests.length && !loading">
+          <AccordionTab header="Solicitações pendentes">
+            <template v-for="item in friends_requests_pending" :key="item.id">
+              <div class="friend" @click="$emit('start-conversation', item)">
+                <div class="left">
+                  <figure></figure>
+                  <span>{{ item.user_name }}</span>
+                </div>
+
+                <div class="right">
+                  <Button
+                    size="small"
+                    type="button"
+                    icon="pi pi-check"
+                    severity="info"
+                    outlined
+                    :disabled="loading_manage_request"
+                    @click="manageFriendRequest(item.friend_applicant_shared_id, true)"
+                  />
+
+                  <Button
+                    size="small"
+                    type="button"
+                    icon="pi pi-times"
+                    severity="danger"
+                    outlined
+                    :disabled="loading_manage_request"
+                    @click="manageFriendRequest(item.friend_applicant_shared_id, false)"
+                  />
+                </div>
+              </div>
+            </template>
+          </AccordionTab>
+          <AccordionTab header="Histórico de solicitações">
+            <template v-for="item in friends_requests" :key="item.id">
+              <div class="friend" @click="$emit('start-conversation', item)">
+                <div class="left">
+                  <figure></figure>
+                  <span>{{ item.user_name }}</span>
+                </div>
+
+                <div v-if="item.friend_status == 'accepted'" class="right">
+                  <Button label="Aceito" size="small" severity="info" text />
+                </div>
+
+                <div v-if="item.friend_status == 'pending'" class="right">
+                  <Button label="Pendente" size="small" severity="warning" text />
+                </div>
+
+                <div v-if="item.friend_status == 'refused'" class="right">
+                  <Button size="small" label="Recusado" severity="danger" text />
+                </div>
+              </div>
+            </template>
+          </AccordionTab>
+        </Accordion>
+
+        <!-- <template
           v-for="item in search.length ? filtered : friends_requests"
           :key="item.id"
         >
@@ -128,7 +191,7 @@ getFriendsRequest();
             </div>
 
             <div v-if="item.friend_status == 'accepted'" class="right">
-              <Button label="Aceito :)" severity="info" text />
+              <Button label="Aceito" size="small" severity="info" text />
             </div>
 
             <div v-if="item.friend_status == 'pending'" class="right">
@@ -154,10 +217,10 @@ getFriendsRequest();
             </div>
 
             <div v-if="item.friend_status == 'refused'" class="right">
-              <Button label="Recusado :/" severity="danger" text />
+              <Button size="small" label="Recusado" severity="danger" text />
             </div>
           </div>
-        </template>
+        </template> -->
 
         <template v-for="item in 4" :key="item">
           <div v-if="loading" class="friend-loading">
@@ -170,10 +233,7 @@ getFriendsRequest();
         </template>
       </div>
 
-      <div
-        v-if="!friends_requests.length && !filtered.length && !loading"
-        class="modal__body__no-content"
-      >
+      <div v-if="!friends_requests.length && !loading" class="modal__body__no-content">
         <span>Nenhuma solicitação encontrada😬</span>
       </div>
     </div>

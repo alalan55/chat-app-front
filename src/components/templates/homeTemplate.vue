@@ -12,6 +12,8 @@ import UserProfile from "../organisms/UserProfile.vue";
 import UpdateProfileModal from "../organisms/UpdateProfileModal.vue";
 import StartupModal from "../organisms/StartupModal.vue";
 import HomeChat from "../organisms/HomeChat.vue";
+import NewGroupModal from "../organisms/NewGroupModal.vue";
+
 import Dialog from "primevue/dialog";
 
 // VARIABLES
@@ -20,6 +22,7 @@ const friend_dialog = ref(false);
 const friend_request_dialog = ref(false);
 const add_friend_dialog = ref(false);
 const update_profile_dialog = ref(false);
+const new_group_dialog = ref(false);
 const current_component_screen = ref("StartupModal");
 const { undo } = useRefHistory(current_component_screen);
 
@@ -56,6 +59,7 @@ const openCHat = () => (current_component_screen.value = "HomeChat");
         @add-friend="add_friend_dialog = true"
         @open-option-dialog="chooseOptionModal"
         @open-profile="setCurrentComponent"
+        @new-group="new_group_dialog = true"
       />
     </section>
 
@@ -91,6 +95,17 @@ const openCHat = () => (current_component_screen.value = "HomeChat");
           @close="friend_dialog = false"
           @start-conversation="startConversation"
         />
+      </template>
+    </Dialog>
+
+    <Dialog
+      v-model:visible="new_group_dialog"
+      modal
+      :style="{ width: '40vw' }"
+      :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+    >
+      <template #container>
+        <NewGroupModal @close="new_group_dialog = false" />
       </template>
     </Dialog>
 
