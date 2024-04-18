@@ -40,6 +40,8 @@ const login = async () => {
     });
   }
 };
+
+store.resetUserInfos()
 </script>
 
 <template>

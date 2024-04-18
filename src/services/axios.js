@@ -1,11 +1,16 @@
 import axios from 'axios'
-const token = localStorage.getItem('token')
+import { useUserStore } from '@/stores/user'
+// const token =
 
 const http = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
-  headers: {
-    Authorization: `Bearer ${token}`
-  }
+  baseURL: import.meta.env.VITE_BASE_URL
+})
+
+http.interceptors.request.use((config) => {
+  const userStore = useUserStore()
+  config.headers.Authorization = `Bearer ${userStore.$token}`
+  config.headers.Accept = 'application/json'
+  return config
 })
 
 export default http

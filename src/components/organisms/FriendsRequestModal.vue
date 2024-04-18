@@ -1,17 +1,18 @@
 <script setup>
+// IMPORTS
 import { ref, watch } from "vue";
-
 import { useToast } from "primevue/usetoast";
 import http from "@/services/axios";
 import Button from "primevue/button";
 import Skeleton from "primevue/skeleton";
 
+// VARIABLES
 const toast = useToast();
 const loading = ref(false);
+const loading_manage_request = ref(false);
 const search = ref("");
 const filtered = ref([]);
 const friends_requests = ref([]);
-
 const mock_users = [
   {
     name: "Bob Taylor",
@@ -40,11 +41,15 @@ const mock_users = [
   },
 ];
 
+// FUNCTIONS
 const getFriendsRequest = async () => {
   try {
     loading.value = true;
     const { data } = await http.get("friends-request");
+    console.log(data);
     friends_requests.value = data.content;
+
+    console.log(data.content);
     loading.value = false;
   } catch (error) {
     loading.value = false;
@@ -57,6 +62,29 @@ const getFriendsRequest = async () => {
   }
 };
 
+const manageFriendRequest = async (user_to_add, accepted) => {
+  try {
+    loading_manage_request.value = true;
+    const { data } = http.get(
+      `manage-friendship?user_to_add_id=${user_to_add}&friendship_accept=${accepted}`
+    );
+    console.log(data);
+    loading_manage_request.value = false;
+
+    getFriendsRequest();
+  } catch (e) {
+    toast.add({
+      severity: "error",
+      summary: "Falha",
+      detail: "Falha ao recusar pedido",
+      life: 3000,
+    });
+
+    loading_manage_request.value = false;
+  }
+};
+
+// WATCH
 watch(search, (nv) => {
   filtered.value = mock_users.filter((user) =>
     user.name.toLocaleLowerCase().includes(nv.toLocaleLowerCase())
@@ -96,15 +124,22 @@ getFriendsRequest();
           <div class="friend" @click="$emit('start-conversation', item)">
             <div class="left">
               <figure></figure>
-              <span>{{ item.applicant_shared_id }}</span>
+              <span>{{ item.user_name }}</span>
             </div>
-            <div class="right">
+
+            <div v-if="item.friend_status == 'accepted'" class="right">
+              <Button label="Aceito :)" severity="info" text />
+            </div>
+
+            <div v-if="item.friend_status == 'pending'" class="right">
               <Button
                 size="small"
                 type="button"
                 icon="pi pi-check"
                 severity="info"
                 outlined
+                :disabled="loading_manage_request"
+                @click="manageFriendRequest(item.friend_applicant_shared_id, true)"
               />
 
               <Button
@@ -113,7 +148,13 @@ getFriendsRequest();
                 icon="pi pi-times"
                 severity="danger"
                 outlined
+                :disabled="loading_manage_request"
+                @click="manageFriendRequest(item.friend_applicant_shared_id, false)"
               />
+            </div>
+
+            <div v-if="item.friend_status == 'refused'" class="right">
+              <Button label="Recusado :/" severity="danger" text />
             </div>
           </div>
         </template>

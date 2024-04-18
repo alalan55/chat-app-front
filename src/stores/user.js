@@ -11,10 +11,17 @@ export const useUserStore = defineStore('user', {
       this.token = payload.token
       localStorage.setItem('user', JSON.stringify(payload.content))
       localStorage.setItem('token', payload.token)
+    },
+    resetUserInfos() {
+      this.user = null
+      this.token = null
+      localStorage.removeItem('token')
+      localStorage.removeItem('user')
     }
   },
   getters: {
-    $current_user: (state) => state.user
+    $current_user: (state) => state.user,
+    $token: (state) => state.token
   }
 })
 
