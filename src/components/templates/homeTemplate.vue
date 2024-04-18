@@ -1,5 +1,7 @@
 <script setup>
+// IMPORTS
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 import { useRefHistory } from "@vueuse/core";
 import HomeChatHeader from "@/components/molecules/HomeChatHeader.vue";
 import HomeChatList from "@/components/molecules/HomeChatList.vue";
@@ -12,6 +14,8 @@ import StartupModal from "../organisms/StartupModal.vue";
 import HomeChat from "../organisms/HomeChat.vue";
 import Dialog from "primevue/dialog";
 
+// VARIABLES
+const router = useRouter();
 const friend_dialog = ref(false);
 const friend_request_dialog = ref(false);
 const add_friend_dialog = ref(false);
@@ -25,6 +29,7 @@ const pages = {
   HomeChat,
 };
 
+// FUNCTIONS
 const openFriendsListModal = () => {
   friend_dialog.value = true;
 };
@@ -36,6 +41,7 @@ const startConversation = (user) => {
 const chooseOptionModal = (e) => {
   if (e.type == 0) friend_request_dialog.value = true;
   if (e.type == 2) update_profile_dialog.value = true;
+  if (e.type == 3) router.push("/");
 };
 
 const setCurrentComponent = () => (current_component_screen.value = "UserProfile");
