@@ -29,12 +29,12 @@ const store = useUserStore();
     </div>
     <div class="profile__middle">
       <figure></figure>
-      <span class="name">{{ store.$current_user.name || "Nome não encontrado" }}</span>
-      <small>{{ store.$current_user.email || "E-mail não encontrado" }}</small>
+      <span class="name">{{ store.$current_user?.name || "Nome não encontrado" }}</span>
+      <small>{{ store.$current_user?.email || "E-mail não encontrado" }}</small>
 
       <div class="profile__middle__description">
         <span>
-          {{ store.$current_user.description || message_default }}
+          {{ store.$current_user?.description || message_default }}
         </span>
       </div>
     </div>
