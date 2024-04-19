@@ -175,6 +175,7 @@ getUsersList();
         box-shadow: -6px 10px 28px -12px rgba(0, 0, 0, 0.15);
         cursor: pointer;
         transition: 0.2s ease-in;
+        border: 2px solid transparent;
 
         figure {
           background: #cdcdcd;
@@ -207,7 +208,7 @@ getUsersList();
       }
 
       .active {
-        border: 1px solid #0ea5e9;
+        border: 2px solid #0ea5e9;
       }
       .friend-loading {
         display: flex;
