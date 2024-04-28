@@ -21,6 +21,7 @@ import Dialog from "primevue/dialog";
 const router = useRouter();
 const store = useUserStore();
 const dinamyc_key_to_chat_list = ref(0);
+const dinamyc_key_to_content_screen = ref(0)
 const friend_dialog = ref(false);
 const friend_request_dialog = ref(false);
 const add_friend_dialog = ref(false);
@@ -66,8 +67,10 @@ const chooseOptionModal = (e) => {
 const setCurrentComponent = () => (current_component_screen.value = "UserProfile");
 
 const openChat = (chat_id) => {
+  store.resetActiveChat()
   store.setActiveChat(chat_id);
   current_component_screen.value = "HomeChat";
+  dinamyc_key_to_content_screen.value++
 };
 </script>
 
@@ -85,7 +88,7 @@ const openChat = (chat_id) => {
 
     <section class="container__content">
       <Transition name="fade" mode="out-in">
-        <component :is="pages[current_component_screen]" @back-previous-page="undo()" />
+        <component :is="pages[current_component_screen]" @back-previous-page="undo()" :key="dinamyc_key_to_content_screen" />
       </Transition>
     </section>
 

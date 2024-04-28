@@ -19,7 +19,7 @@ const getChats = async () => {
     loading_chat.value = true;
     const { data } = await http.get("chat-list");
     chat_list.value = data.content;
-    console.log(data.content, 'lista de conversations');
+    console.log(data.content, "lista de conversations");
     loading_chat.value = false;
   } catch (e) {
     console.error("error");
