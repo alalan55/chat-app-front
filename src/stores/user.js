@@ -3,9 +3,16 @@ import { defineStore, acceptHMRUpdate } from 'pinia'
 export const useUserStore = defineStore('user', {
   state: () => ({
     user: null,
-    token: null
+    token: null,
+    activeChat: null
   }),
   actions: {
+    setActiveChat(payload){
+      this.activeChat = payload
+    },
+    resetActiveChat(){
+      this.activeChat = null
+    },
     setCurrentUser(payload) {
       this.user = payload.content
       this.token = payload.token
@@ -15,13 +22,15 @@ export const useUserStore = defineStore('user', {
     resetUserInfos() {
       this.user = null
       this.token = null
+      this.activeChat = null
       localStorage.removeItem('token')
       localStorage.removeItem('user')
     }
   },
   getters: {
     $current_user: (state) => state.user,
-    $token: (state) => state.token
+    $token: (state) => state.token,
+    $activeChat: (state) => state.activeChat
   }
 })
 

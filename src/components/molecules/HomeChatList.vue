@@ -18,7 +18,8 @@ const getChats = async () => {
   try {
     loading_chat.value = true;
     const { data } = await http.get("chat-list");
-    console.log(data.content);
+    chat_list.value = data.content;
+    console.log(data.content, 'lista de conversations');
     loading_chat.value = false;
   } catch (e) {
     console.error("error");
@@ -136,11 +137,11 @@ getChats();
   <div class="chat-list">
     <div v-if="chat_list.length && !loading_chat" class="chat-list__list">
       <template v-for="(item, i) in chat_list" :key="i">
-        <div class="item" @click="emit('open-chat')">
+        <div class="item" @click="emit('open-chat', item)">
           <div class="left">
             <figure></figure>
             <div class="texts">
-              <strong>{{ item.name }}</strong>
+              <strong>{{ item.converation_name }}</strong>
               <!-- <br />
             <small>Alguma mensagem...</small> -->
             </div>
@@ -155,6 +156,7 @@ getChats();
         </div>
       </template>
     </div>
+
     <div v-if="loading_chat" class="chat-list__loading">
       <template v-for="item in 4" :key="item">
         <div>
@@ -166,6 +168,7 @@ getChats();
         </div>
       </template>
     </div>
+
     <div v-if="!chat_list.length && !loading_chat" class="chat-list__no-data">
       <span>Inicie uma conversa😁</span>
     </div>
@@ -247,18 +250,18 @@ getChats();
       }
     }
   }
-  
-  &__loading{
+
+  &__loading {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    & > div {
+      padding: 1rem;
       display: flex;
-      flex-direction: column;
-      gap: .6rem;
-      &>div{
-        padding: 1rem;
-        display: flex;
-        align-items: center;
-        gap: .5rem;
-      }
+      align-items: center;
+      gap: 0.5rem;
     }
+  }
   &__no-data {
     height: 50vh;
     height: 50dvh;

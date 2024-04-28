@@ -3,6 +3,8 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useRefHistory } from "@vueuse/core";
+import http from "@/services/axios";
+import { useUserStore } from "@/stores/user";
 import HomeChatHeader from "@/components/molecules/HomeChatHeader.vue";
 import HomeChatList from "@/components/molecules/HomeChatList.vue";
 import FriendsListModal from "@/components/organisms/FriendsListModal.vue";
@@ -13,11 +15,12 @@ import UpdateProfileModal from "../organisms/UpdateProfileModal.vue";
 import StartupModal from "../organisms/StartupModal.vue";
 import HomeChat from "../organisms/HomeChat.vue";
 import NewGroupModal from "../organisms/NewGroupModal.vue";
-
 import Dialog from "primevue/dialog";
 
 // VARIABLES
 const router = useRouter();
+const store = useUserStore();
+const dinamyc_key_to_chat_list = ref(0);
 const friend_dialog = ref(false);
 const friend_request_dialog = ref(false);
 const add_friend_dialog = ref(false);
@@ -36,9 +39,22 @@ const pages = {
 const openFriendsListModal = () => {
   friend_dialog.value = true;
 };
-const startConversation = (user) => {
-  console.log(user);
+
+const startConversation = async (user) => {
+  const conversation_model = { name: "", friends_list: [] };
+  conversation_model.friends_list.push(user.id);
   friend_dialog.value = false;
+
+  try {
+    await http.post("create-conversation", conversation_model);
+    dinamyc_key_to_chat_list.value++;
+
+    console.log("chamar o open chat passando o id da conversation para abrir a conversa");
+  } catch (e) {
+    console.error(e);
+  }
+
+  // chamar api para criar conversação
 };
 
 const chooseOptionModal = (e) => {
@@ -48,7 +64,11 @@ const chooseOptionModal = (e) => {
 };
 
 const setCurrentComponent = () => (current_component_screen.value = "UserProfile");
-const openCHat = () => (current_component_screen.value = "HomeChat");
+
+const openChat = (chat_id) => {
+  store.setActiveChat(chat_id);
+  current_component_screen.value = "HomeChat";
+};
 </script>
 
 <template>
@@ -70,7 +90,7 @@ const openCHat = () => (current_component_screen.value = "HomeChat");
     </section>
 
     <section class="container__chat">
-      <HomeChatList @open-chat="openCHat" />
+      <HomeChatList :key="dinamyc_key_to_chat_list" @open-chat="openChat" />
     </section>
 
     <Dialog

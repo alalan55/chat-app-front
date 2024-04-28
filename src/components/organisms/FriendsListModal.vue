@@ -120,7 +120,7 @@ const getUsersList = async () => {
     const { data } = await http.get("friends");
     users.value = data.content;
     loading.value = false;
-    console.log(data);
+   
   } catch (e) {
     loading.value = false;
     toast.add({

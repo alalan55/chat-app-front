@@ -1,14 +1,23 @@
 <script setup>
+// IMPORTS
 import { ref } from "vue";
-
+import { useUserStore } from "@/stores/user";
 import Button from "primevue/button";
 import Menu from "primevue/menu";
 import TheInput from "../atoms/TheInput.vue";
 import EmojiPicker from "vue3-emoji-picker";
 import "vue3-emoji-picker/css";
 
+// EMITS
 const emit = defineEmits(["back-previous-page"]);
 
+// VARIABLES
+// const id = Date.now();
+// const socket = ref(null);
+const store = useUserStore();
+const current_chat = ref(store.$activeChat);
+const current_user = ref(store.$current_user);
+const url = `ws://localhost:8000/connect-conversation/${current_chat.value.id}?token=${store.$token}`;
 const message = ref("");
 const show_emojis = ref(false);
 const menu = ref(null);
@@ -26,6 +35,33 @@ const items = ref([
     type: 2,
   },
 ]);
+const messages = ref([]);
+
+// const ws = new WebSocket(url, null, { headers });
+const ws = new WebSocket(url);
+
+ws.onmessage = function (event) {
+  messages.value.push(event.data);
+  // console.log(event.data, "evento chegando aquiiii");
+};
+
+// FUNCTIONS
+const sendMenssage = (e) => {
+  if (e.key.toLowerCase() == "enter") {
+    const message_model = {
+      conversation_id: store.$activeChat.id,
+      from_user: store.$current_user.shared_id,
+      to_user: "",
+      message_text: message.value,
+      sent_datetime: "str",
+    };
+
+    const parsed = JSON.stringify(message_model);
+
+    ws.send(parsed);
+    message.value = "";
+  }
+};
 
 const toggleOptionsMenu = (event) => {
   menu.value.toggle(event);
@@ -38,60 +74,71 @@ const onSelectEmoji = (emoji) => {
   toggleEmoji();
 };
 
-const messages_mock = [
-  {
-    id: 0,
-    message: "Fala meu amigo, como é que você está?🤣",
-    sender: 0,
-  },
-  {
-    id: 2,
-    message: "Tudo na pax meu manooo",
-    sender: 1,
-  },
-  {
-    id: 2,
-    message: "E contigo?",
-    sender: 1,
-  },
-  {
-    id: 3,
-    message: "Que bom mano, eu estou bem também!!",
-    sender: 0,
-  },
-  {
-    id: 4,
-    message: "Como tem ido aí nas coisas mano?",
-    sender: 0,
-  },
-  {
-    id: 5,
-    message: "Todos bem por aí?",
-    sender: 0,
-  },
-  {
-    id: 6,
-    message:
-      "por aqui tudo safe bro, minha mãe está bem graças a Deus, trabalho está fluindo legal, então não posso reclamar de nada não, só agradecer mesmo!🤗",
-    sender: 1,
-  },
-  {
-    id: 7,
-    message: "Por aí mano?",
-    sender: 1,
-  },
-  {
-    id: 8,
-    message: "Conseguiu resolver aqueles B.O's do trampo que voce tinha me falado hahah?",
-    sender: 1,
-  },
-  {
-    id: 9,
-    message:
-      "Pode acreditar que sim mano, foi difícil para um caramba kkkk mas no fim deu tudo certo, graças a Deus",
-    sender: 0,
-  },
-];
+const formateToJson = (datas) => {
+  const infos = [];
+
+  datas.forEach((str) => {
+    const obj = JSON.parse(str);
+    infos.push(obj);
+  });
+
+  return infos;
+};
+
+// const messages_mock = [
+//   {
+//     id: 0,
+//     message: "Fala meu amigo, como é que você está?🤣",
+//     sender: 0,
+//   },
+//   {
+//     id: 2,
+//     message: "Tudo na pax meu manooo",
+//     sender: 1,
+//   },
+//   {
+//     id: 2,
+//     message: "E contigo?",
+//     sender: 1,
+//   },
+//   {
+//     id: 3,
+//     message: "Que bom mano, eu estou bem também!!",
+//     sender: 0,
+//   },
+//   {
+//     id: 4,
+//     message: "Como tem ido aí nas coisas mano?",
+//     sender: 0,
+//   },
+//   {
+//     id: 5,
+//     message: "Todos bem por aí?",
+//     sender: 0,
+//   },
+//   {
+//     id: 6,
+//     message:
+//       "por aqui tudo safe bro, minha mãe está bem graças a Deus, trabalho está fluindo legal, então não posso reclamar de nada não, só agradecer mesmo!🤗",
+//     sender: 1,
+//   },
+//   {
+//     id: 7,
+//     message: "Por aí mano?",
+//     sender: 1,
+//   },
+//   {
+//     id: 8,
+//     message: "Conseguiu resolver aqueles B.O's do trampo que voce tinha me falado hahah?",
+//     sender: 1,
+//   },
+//   {
+//     id: 9,
+//     message:
+//       "Pode acreditar que sim mano, foi difícil para um caramba kkkk mas no fim deu tudo certo, graças a Deus",
+//     sender: 0,
+//   },
+// ];
 </script>
 
 <template>
@@ -99,7 +146,7 @@ const messages_mock = [
     <div class="profile__header">
       <div class="left">
         <figure></figure>
-        <span>Nome do fulano</span>
+        <span>{{ current_chat.converation_name || "Nome não encontrado" }}</span>
       </div>
       <div class="right">
         <i
@@ -147,11 +194,20 @@ const messages_mock = [
     </div>
 
     <div class="profile__body">
+      <!-- <pre>
+        {{ messages }}
+      </pre> -->
+      <!-- <pre>
+        {{ messages }}
+      </pre> -->
       <ul>
-        <template v-for="item in messages_mock" :key="item.id">
-          <li :class="{ is_me: item.sender == 0 }" class="message">
+        <template v-for="item in formateToJson(messages)" :key="item.id">
+          <li
+            :class="{ is_me: item.from_user == current_user.shared_id }"
+            class="message"
+          >
             <div class="message__box">
-              <span>{{ item.message }}</span>
+              <span>{{ item.message_text }}</span>
             </div>
           </li>
         </template>
@@ -174,7 +230,12 @@ const messages_mock = [
         class="emoji-finder"
         @select="onSelectEmoji"
       />
-      <TheInput v-model="message" class="inpt" placeholder="Digite uma mensagem" />
+      <TheInput
+        v-model="message"
+        class="inpt"
+        placeholder="Digite uma mensagem"
+        @keyup="sendMenssage"
+      />
     </div>
   </div>
 </template>

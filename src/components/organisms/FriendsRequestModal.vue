@@ -74,7 +74,7 @@ const manageFriendRequest = async (user_to_add, accepted) => {
     const { data } = http.get(
       `manage-friendship?user_to_add_id=${user_to_add}&friendship_accept=${accepted}`
     );
-    console.log(data);
+   
     loading_manage_request.value = false;
 
     getFriendsRequest();
