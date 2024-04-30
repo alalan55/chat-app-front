@@ -84,61 +84,6 @@ const formateToJson = (datas) => {
 
   return infos;
 };
-
-// const messages_mock = [
-//   {
-//     id: 0,
-//     message: "Fala meu amigo, como é que você está?🤣",
-//     sender: 0,
-//   },
-//   {
-//     id: 2,
-//     message: "Tudo na pax meu manooo",
-//     sender: 1,
-//   },
-//   {
-//     id: 2,
-//     message: "E contigo?",
-//     sender: 1,
-//   },
-//   {
-//     id: 3,
-//     message: "Que bom mano, eu estou bem também!!",
-//     sender: 0,
-//   },
-//   {
-//     id: 4,
-//     message: "Como tem ido aí nas coisas mano?",
-//     sender: 0,
-//   },
-//   {
-//     id: 5,
-//     message: "Todos bem por aí?",
-//     sender: 0,
-//   },
-//   {
-//     id: 6,
-//     message:
-//       "por aqui tudo safe bro, minha mãe está bem graças a Deus, trabalho está fluindo legal, então não posso reclamar de nada não, só agradecer mesmo!🤗",
-//     sender: 1,
-//   },
-//   {
-//     id: 7,
-//     message: "Por aí mano?",
-//     sender: 1,
-//   },
-//   {
-//     id: 8,
-//     message: "Conseguiu resolver aqueles B.O's do trampo que voce tinha me falado hahah?",
-//     sender: 1,
-//   },
-//   {
-//     id: 9,
-//     message:
-//       "Pode acreditar que sim mano, foi difícil para um caramba kkkk mas no fim deu tudo certo, graças a Deus",
-//     sender: 0,
-//   },
-// ];
 </script>
 
 <template>
@@ -146,7 +91,7 @@ const formateToJson = (datas) => {
     <div class="profile__header">
       <div class="left">
         <figure></figure>
-        <span>{{ current_chat.converation_name || "Nome não encontrado" }}</span>
+        <span>{{ current_chat.conversation_name || "Nome não encontrado" }}</span>
       </div>
       <div class="right">
         <i
