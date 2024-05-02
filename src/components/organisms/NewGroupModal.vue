@@ -6,6 +6,7 @@ import { useToast } from "primevue/usetoast";
 import http from "@/services/axios";
 import Skeleton from "primevue/skeleton";
 import Button from "primevue/button";
+import Dialog from "primevue/dialog";
 
 // VARIABLES
 const loading = ref(false);
@@ -13,7 +14,14 @@ const search = ref("");
 const filtered = ref([]);
 const users = ref([]);
 const users_list_group = ref([]);
+const group_name = ref("");
+const confirmation_dialog = ref(false);
+const loading_creation = ref(false);
 const toast = useToast();
+
+// EMITS
+
+const emit = defineEmits(["close"]);
 
 // FUNCTIONS
 const getUsersList = async () => {
@@ -48,6 +56,37 @@ const isOnList = (user) => {
   return founded >= 0;
 };
 
+const createGroup = async () => {
+  loading_creation.value = true;
+  const group_model = {};
+  group_model.friends_list = users_list_group.value.map((el) => el.id);
+  group_model.conversation_type = 1;
+  group_model.name = group_name.value;
+
+  try {
+    await http.post("create-conversation", group_model);
+
+    toast.add({
+      severity: "sucess",
+      summary: "Sucesso",
+      detail: "Grupo criado com sucesso",
+      life: 3000,
+    });
+
+    loading_creation.value = false;
+
+    emit("close", true);
+  } catch (e) {
+    toast.add({
+      severity: "error",
+      summary: "Falha",
+      detail: "Error ao criar grupo",
+      life: 3000,
+    });
+    loading_creation.value = false;
+  }
+};
+
 // WATCHERS
 watch(search, (nv) => {
   filtered.value = users.value.filter((user) =>
@@ -69,7 +108,7 @@ getUsersList();
         </div>
       </div>
       <div class="right">
-        <i class="pi pi-times" @click="$emit('close')"></i>
+        <i class="pi pi-times" @click="emit('close')"></i>
       </div>
     </div>
 
@@ -118,8 +157,45 @@ getUsersList();
         label="Criar grupo"
         severity="info"
         :disabled="users_list_group.length < 2"
+        @click="confirmation_dialog = true"
       />
     </div>
+
+    <Dialog
+      v-model:visible="confirmation_dialog"
+      modal
+      :style="{ width: '40vw' }"
+      :breakpoints="{ '1199px': '45vw', '575px': '90vw' }"
+    >
+      <template #container>
+        <div class="modal__confirmation">
+          <div class="modal__confirmation__body">
+            <span>Insira abaixo o nome para a criação do grupo</span>
+            <TheInput v-model="group_name" placeholder="Nome do grupo" />
+          </div>
+          <div class="modal__confirmation__footer">
+            <Button
+              outlined
+              size="small"
+              label="Cancelar"
+              severity="info"
+              @click="
+                confirmation_dialog = false;
+                group_name = '';
+              "
+            />
+            <Button
+              size="small"
+              label="Criar"
+              severity="info"
+              :loading="loading_creation"
+              :disabled="loading_creation"
+              @click="createGroup"
+            />
+          </div>
+        </div>
+      </template>
+    </Dialog>
   </div>
 </template>
 
@@ -231,6 +307,31 @@ getUsersList();
     display: flex;
     align-items: center;
     justify-content: flex-end;
+  }
+
+  &__confirmation {
+    padding: 1rem;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    &__body {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      span {
+        font-weight: 500;
+        font-size: 0.9rem;
+      }
+    }
+
+    &__footer {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      justify-content: flex-end;
+    }
   }
 }
 </style>

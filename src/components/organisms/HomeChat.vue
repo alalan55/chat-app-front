@@ -51,6 +51,7 @@ const sendMenssage = (e) => {
     const message_model = {
       conversation_id: store.$activeChat.id,
       from_user: store.$current_user.shared_id,
+      from_user_name: store.$current_user.name,
       to_user: "",
       message_text: message.value,
       sent_datetime: "str",
@@ -126,32 +127,27 @@ const formateToJson = (datas) => {
           </template>
         </Menu>
       </div>
-
-      <!-- <Button
-        size="small"
-        icon="pi pi-arrow-left"
-        severity="info"
-        text
-        rounded
-        aria-label="Cancel"
-        @click="emit('back-previous-page')"
-      /> -->
     </div>
 
     <div class="profile__body">
-      <!-- <pre>
-        {{ messages }}
-      </pre> -->
-      <!-- <pre>
-        {{ messages }}
-      </pre> -->
       <ul>
         <template v-for="item in formateToJson(messages)" :key="item.id">
+          <!-- {{ store.$activeChat }} conversation_type -->
+          <!-- {{ item }} -->
+
           <li
             :class="{ is_me: item.from_user == current_user.shared_id }"
             class="message"
           >
             <div class="message__box">
+              <small
+                v-if="
+                  store.$activeChat.conversation_type &&
+                  item.from_user != current_user.shared_id
+                "
+              >
+                <strong>{{ item.from_user_name }}</strong></small
+              >
               <span>{{ item.message_text }}</span>
             </div>
           </li>
@@ -249,10 +245,15 @@ const formateToJson = (datas) => {
 
         &__box {
           max-width: 45%;
-          display: inline-block;
+          display: inline-flex;
           border-radius: 8px;
           padding: 0.6rem 1rem;
           background: #ebebeb;
+          flex-direction: column;
+          small {
+            display: block;
+            margin-bottom: 0.2rem;
+          }
         }
       }
 

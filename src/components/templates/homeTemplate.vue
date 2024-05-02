@@ -46,10 +46,7 @@ const startConversation = async (user) => {
   conversation_model.friends_list.push(user.id);
   friend_dialog.value = false;
 
-  console.log(conversation_model);
-
   try {
-    console.log("entrei aqui cara?");
     await http.post("create-conversation", conversation_model);
     dinamyc_key_to_chat_list.value++;
 
@@ -74,6 +71,11 @@ const openChat = (chat_id) => {
   store.setActiveChat(chat_id);
   current_component_screen.value = "HomeChat";
   dinamyc_key_to_content_screen.value++;
+};
+
+const closeGroupDialog = (event) => {
+  if (event) dinamyc_key_to_chat_list.value++;
+  new_group_dialog.value = false;
 };
 </script>
 
@@ -135,7 +137,7 @@ const openChat = (chat_id) => {
       :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
     >
       <template #container>
-        <NewGroupModal @close="new_group_dialog = false" />
+        <NewGroupModal @close="closeGroupDialog" />
       </template>
     </Dialog>
 
