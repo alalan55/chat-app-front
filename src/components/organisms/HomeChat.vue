@@ -9,7 +9,7 @@ import EmojiPicker from "vue3-emoji-picker";
 import "vue3-emoji-picker/css";
 
 // EMITS
-const emit = defineEmits(["back-previous-page"]);
+const emit = defineEmits(["back-previous-page", "get-chat-information"]);
 
 // VARIABLES
 // const id = Date.now();
@@ -91,7 +91,7 @@ const formateToJson = (datas) => {
   <div class="profile">
     <div class="profile__header">
       <div class="left">
-        <figure></figure>
+        <figure @click="emit('get-chat-information', store.$activeChat.id)"></figure>
         <span>{{ current_chat.conversation_name || "Nome não encontrado" }}</span>
       </div>
       <div class="right">
@@ -132,7 +132,7 @@ const formateToJson = (datas) => {
     <div class="profile__body">
       <ul>
         <template v-for="item in formateToJson(messages)" :key="item.id">
-          <!-- {{ store.$activeChat }} conversation_type -->
+          <!-- {{ store.$activeChat }} -->
           <!-- {{ item }} -->
 
           <li

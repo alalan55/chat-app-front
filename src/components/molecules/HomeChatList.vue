@@ -31,7 +31,7 @@ getChats();
 </script>
 
 <template>
-  <!-- <button @click="getChats()">Alohaa</button> -->
+  <!-- <button @click="getChats()">FORCE RELOAD</button> -->
 
   <div class="chat-list">
     <div v-if="chat_list.length && !loading_chat" class="chat-list__list">

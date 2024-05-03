@@ -14,6 +14,7 @@ import UserProfile from "../organisms/UserProfile.vue";
 import UpdateProfileModal from "../organisms/UpdateProfileModal.vue";
 import StartupModal from "../organisms/StartupModal.vue";
 import HomeChat from "../organisms/HomeChat.vue";
+import CurrentChatInformation from "../organisms/CurrentChatInformation.vue";
 import NewGroupModal from "../organisms/NewGroupModal.vue";
 import Dialog from "primevue/dialog";
 
@@ -34,9 +35,15 @@ const pages = {
   UserProfile,
   StartupModal,
   HomeChat,
+  CurrentChatInformation,
 };
 
 // FUNCTIONS
+const getChatInformation = (chat_id) => {
+  current_component_screen.value = 'CurrentChatInformation'
+  console.log(chat_id);
+};
+
 const openFriendsListModal = () => {
   friend_dialog.value = true;
 };
@@ -96,6 +103,7 @@ const closeGroupDialog = (event) => {
         <component
           :is="pages[current_component_screen]"
           @back-previous-page="undo()"
+          @get-chat-information="getChatInformation"
           :key="dinamyc_key_to_content_screen"
         />
       </Transition>
