@@ -50,38 +50,72 @@ getChatInformation();
       />
     </div>
 
-    <div class="profile__middle">
-      <!-- {{ current_chat_infos }} -->
-      <figure></figure>
+    <template v-if="current_chat_infos.conversation_type">
+      <div class="profile__middle">
+        <!-- {{ current_chat_infos }} -->
+        <figure></figure>
 
-      <span class="name">
-        {{ current_chat_infos.conversation_name || "Nome não encontrado" }}
-      </span>
+        <span class="name">
+          {{ current_chat_infos.conversation_name || "Nome não encontrado" }}
+        </span>
 
-      <small>Grupo - {{ current_chat_infos.participants.length }} membros</small>
+        <small
+          >{{ current_chat_infos.conversation_type ? "Grupo" : "Pessoal" }} -
+          {{ current_chat_infos.participants.length }} membros</small
+        >
 
-      <div class="profile__middle__description"></div>
-    </div>
+        <div class="profile__middle__description"></div>
+      </div>
 
-    <div class="profile__body">
-      <!-- <span> {{ current_chat_infos.participants.length }} membros</span> -->
+      <div class="profile__body">
+        <!-- <span> {{ current_chat_infos.participants.length }} membros</span> -->
 
-      <ul>
-        <li v-for="user in current_chat_infos.participants" :key="user.id" class="user">
-          <div class="left">
-            <figure></figure>
-            <span>{{ user.name }}</span>
+        <ul>
+          <li v-for="user in current_chat_infos.participants" :key="user.id" class="user">
+            <div class="left">
+              <figure></figure>
+              <div class="texts">
+                <span>{{ user.name }} </span>
+                <small># {{ user.shared_id }}</small>
+              </div>
+            </div>
+            <div class="right">
+              <Badge
+                v-if="current_chat_infos.created_by == user.id"
+                severity="success"
+                value="Admin"
+              />
+            </div>
+          </li>
+        </ul>
+      </div>
+    </template>
+
+    <template v-else>
+      <div class="profile__body-profile">
+        <!-- {{ current_chat_infos }} -->
+        <figure></figure>
+
+        <span class="name">
+          {{ current_chat_infos.participants.name || "Nome não encontrado" }}
+        </span>
+
+        <small># {{ current_chat_infos.participants.shared_id }} </small>
+
+        <div class="profile__body-profile__descriptions">
+          <div class="title">
+            <span>Sobre</span>
           </div>
-          <div class="right">
-            <Badge
-              v-if="current_chat_infos.created_by == user.id"
-              severity="success"
-              value="admin"
-            />
+          <div class="texts">
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam nihil
+              minus enim beatae nulla ab cumque a cum illo, harum fugit dolorum nam neque
+              id, esse sunt suscipit fugiat nisi.
+            </p>
           </div>
-        </li>
-      </ul>
-    </div>
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -157,8 +191,16 @@ getChatInformation();
             background: #cdcdcd;
             border-radius: 50%;
           }
-          span {
-            font-weight: 500;
+          .texts {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            span {
+              font-weight: 500;
+            }
+            small {
+              font-size: 0.7rem;
+            }
           }
         }
 
@@ -167,6 +209,45 @@ getChatInformation();
         }
       }
     }
+  }
+
+  &__body-profile {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    figure {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: #cdcdcd;
+      margin-bottom: 1.2rem;
+    }
+
+    .name {
+      font-weight: 600;
+      font-size: 1.5rem;
+    }
+
+    &__descriptions {
+      margin-top: 1.5rem;
+      //   margin-top: 1rem;
+      text-align: center;
+      max-width: 70%;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      span {
+        font-weight: 500;
+      }
+    }
+  }
+
+  & > div {
+    // border: 3px solid;
   }
 }
 </style>
