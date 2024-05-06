@@ -47,7 +47,7 @@ current_user.value = { ...store.$current_user };
           />
         </label>
         <label>
-          Recado
+          Status
           <TheInput
             v-model="current_user.message"
             icon-left="pi pi-comment"
