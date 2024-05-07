@@ -4,25 +4,28 @@ import { ref } from "vue";
 import { useUserStore } from "@/stores/user";
 import { useToast } from "primevue/usetoast";
 import http from "@/services/axios";
-
+import Skeleton from "primevue/skeleton";
 import Button from "primevue/button";
 import Badge from "primevue/badge";
 
 // EMITS
-const emit = defineEmits(["back-previous-page"]);
+const emit = defineEmits(["back-previous-page", "close"]);
 
 // VARIABLES
 const store = useUserStore();
 const toast = useToast();
 const current_chat_infos = ref(null);
+const loading_infos = ref(false);
 
 // FUNCTIONS
 const getChatInformation = async () => {
   try {
+    loading_infos.value = true;
     const chat_id = store.$activeChat.id;
     const { data } = await http.get(`get-chat-info/${chat_id}`);
     current_chat_infos.value = data.content;
-    console.log(data, "informations hereee");
+    // console.log(data, "informations hereee");
+    loading_infos.value = false;
   } catch (e) {
     toast.add({
       severity: "error",
@@ -30,6 +33,7 @@ const getChatInformation = async () => {
       detail: "Falha ao obter informações do chat",
       life: 3000,
     });
+    loading_infos.value = false;
   }
 };
 
@@ -49,11 +53,17 @@ getChatInformation();
         @click="emit('close')"
       />
     </div>
+
     <!-- CONVERSA EM GRUPO  -->
-    <template v-if="current_chat_infos?.conversation_type">
+    <template v-if="current_chat_infos?.conversation_type && !loading_infos">
       <div class="profile__middle">
-        <!-- {{ current_chat_infos }} -->
-        <figure></figure>
+        <Skeleton
+          v-if="loading_infos"
+          shape="circle"
+          size="11rem"
+          class="mr-2"
+        ></Skeleton>
+        <figure v-else></figure>
 
         <span class="name">
           {{ current_chat_infos?.conversation_name || "Nome não encontrado" }}
@@ -67,43 +77,67 @@ getChatInformation();
         <div class="profile__middle__description"></div>
       </div>
 
-      <div class="profile__body">
+      <div class="profile__body-group">
         <!-- <span> {{ current_chat_infos.participants.length }} membros</span> -->
 
         <ul>
-          <li
-            v-for="user in current_chat_infos?.participants"
-            :key="user.id"
-            class="user"
-          >
-            <div class="left">
-              <figure></figure>
-              <div class="texts">
-                <span>{{ user.name }} </span>
-                <small># {{ user.shared_id }}</small>
+          <template v-if="loading_infos">
+            <li v-for="item in 3" :key="item" class="user">
+              <div class="left">
+                <Skeleton shape="circle" size="4rem" class="mr-2"></Skeleton>
+
+                <div class="texts" style="width: 100%">
+                  <Skeleton
+                    width="40%"
+                    class="mb-2"
+                    style="margin-bottom: 1rem"
+                  ></Skeleton>
+                  <Skeleton width="75%"></Skeleton>
+                </div>
               </div>
-            </div>
-            <div class="right">
-              <Badge
-                v-if="current_chat_infos?.created_by == user.id"
-                severity="success"
-                value="Admin"
-              />
-            </div>
-          </li>
+              <div class="right"></div>
+            </li>
+          </template>
+
+          <template v-if="!loading_infos && !current_chat_infos?.participants.length">
+            <span>Usuários não encontrado</span>
+          </template>
+
+          <template v-if="!loading_infos && current_chat_infos?.participants.length">
+            <li
+              v-for="user in current_chat_infos?.participants"
+              :key="user.id"
+              class="user"
+            >
+              <div class="left">
+                <figure></figure>
+                <div class="texts">
+                  <span>{{ user.name }} </span>
+                  <small># {{ user.shared_id }}</small>
+                </div>
+              </div>
+              <div class="right">
+                <Badge
+                  v-if="current_chat_infos?.created_by == user.id"
+                  severity="success"
+                  value="Admin"
+                />
+              </div>
+            </li>
+          </template>
         </ul>
       </div>
     </template>
 
     <!-- CONVERSA PRIVADA -->
-    <template v-else>
+    <template v-if="!current_chat_infos?.conversation_type && !loading_infos">
       <div class="profile__body-private">
         <div class="profile__body-private__cover">
           <figure class="figure-cover">
-            <img src="/img/bg.jpg" alt="">
+            <img src="/img/bg.jpg" alt="" />
           </figure>
           <figure class="figure-profile">
-            <img src="/img/eu.jpg" alt="">
+            <img src="/img/eu.jpg" alt="" />
           </figure>
         </div>
 
@@ -123,6 +157,50 @@ getChatInformation();
             </p>
           </div>
         </div>
+      </div>
+    </template>
+
+    <!-- LOADING DE INFOMAÇÕES -->
+    <template v-if="loading_infos">
+      <div class="profile__middle">
+        <Skeleton
+          v-if="loading_infos"
+          shape="circle"
+          size="11rem"
+          class="mr-2"
+        ></Skeleton>
+        <figure v-else></figure>
+
+        <span class="name">
+          <Skeleton width="75%"></Skeleton>
+        </span>
+
+        <small>
+          <Skeleton width="40%" class="mb-2" style="margin-bottom: 1rem"></Skeleton
+        ></small>
+
+        <div class="profile__middle__description"></div>
+      </div>
+
+      <div class="profile__body-group">
+        <ul>
+          <li v-for="item in 3" :key="item" class="user">
+            <div class="left">
+              <Skeleton
+                shape="circle"
+                size="4rem"
+                class="mr-2"
+                style="width: 75px"
+              ></Skeleton>
+
+              <div class="texts" style="width: 100%">
+                <Skeleton width="40%" class="mb-2" style="margin-bottom: 1rem"></Skeleton>
+                <Skeleton width="75%"></Skeleton>
+              </div>
+            </div>
+            <div class="right"></div>
+          </li>
+        </ul>
       </div>
     </template>
   </div>
@@ -177,7 +255,7 @@ getChatInformation();
     }
   }
 
-  &__body {
+  &__body-group {
     flex: 1;
     overflow-y: auto;
     @include trackScrollBar;
@@ -203,6 +281,7 @@ getChatInformation();
           display: flex;
           align-items: center;
           gap: 1rem;
+          flex: 1;
           figure {
             width: 70px;
             height: 70px;
@@ -213,6 +292,7 @@ getChatInformation();
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
+
             span {
               font-weight: 500;
             }
@@ -246,17 +326,16 @@ getChatInformation();
       position: relative;
       margin-bottom: 4.5rem;
 
-      .figure-cover{
+      .figure-cover {
         width: 100%;
         height: 100%;
         border-radius: 10px;
         overflow: hidden;
-     
 
-        img{
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
         }
       }
 
@@ -271,10 +350,10 @@ getChatInformation();
         transform: translate(-50%, -60%);
         overflow: hidden;
 
-        img{
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
         }
       }
     }
@@ -282,8 +361,7 @@ getChatInformation();
     &__content {
       .texts {
         text-align: center;
-
-        strong {
+        bo strong {
           font-size: 1.6rem;
           font-weight: 800;
           color: #303030;
