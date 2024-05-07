@@ -26,11 +26,9 @@ const createUser = async () => {
   if (new_user.value.password == confirmation_pawword.value) {
     try {
       loading.value = true;
-
-      const { data } = await http.post("/", new_user.value);
-      console.log(data);
-
+      await http.post("/", new_user.value);
       loading.value = false;
+
       toast.add({
         severity: "success",
         summary: "success",

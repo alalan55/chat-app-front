@@ -16,6 +16,7 @@ import StartupModal from "../organisms/StartupModal.vue";
 import HomeChat from "../organisms/HomeChat.vue";
 import CurrentChatInformation from "../organisms/CurrentChatInformation.vue";
 import NewGroupModal from "../organisms/NewGroupModal.vue";
+import ChatInformationModal from "../organisms/ChatInformationModal.vue";
 import Dialog from "primevue/dialog";
 
 // VARIABLES
@@ -28,6 +29,7 @@ const friend_request_dialog = ref(false);
 const add_friend_dialog = ref(false);
 const update_profile_dialog = ref(false);
 const new_group_dialog = ref(false);
+const chat_information_dialog = ref(false);
 const current_component_screen = ref("StartupModal");
 const { undo } = useRefHistory(current_component_screen);
 
@@ -39,9 +41,11 @@ const pages = {
 };
 
 // FUNCTIONS
-const getChatInformation = (chat_id) => {
-  current_component_screen.value = 'CurrentChatInformation'
-  console.log(chat_id);
+const getChatInformation = () => {
+  // current_component_screen.value = "CurrentChatInformation";
+  // console.log(chat_id);
+  chat_information_dialog.value = true
+  console.log(chat_information_dialog.value, 'chat hereee')
 };
 
 const openFriendsListModal = () => {
@@ -66,18 +70,21 @@ const startConversation = async (user) => {
 };
 
 const chooseOptionModal = (e) => {
+  console.log(e);
   if (e.type == 0) friend_request_dialog.value = true;
   if (e.type == 2) update_profile_dialog.value = true;
   if (e.type == 3) router.push("/");
 };
 
-const setCurrentComponent = () => (current_component_screen.value = "UserProfile");
+const setProfileToScreen = () => current_component_screen.value = "UserProfile";
+
 
 const openChat = (chat_id) => {
   store.resetActiveChat();
   store.setActiveChat(chat_id);
   current_component_screen.value = "HomeChat";
   dinamyc_key_to_content_screen.value++;
+
 };
 
 const closeGroupDialog = (event) => {
@@ -93,7 +100,7 @@ const closeGroupDialog = (event) => {
         @open-friends-list="openFriendsListModal"
         @add-friend="add_friend_dialog = true"
         @open-option-dialog="chooseOptionModal"
-        @open-profile="setCurrentComponent"
+        @open-profile="setProfileToScreen"
         @new-group="new_group_dialog = true"
       />
     </section>
@@ -112,6 +119,17 @@ const closeGroupDialog = (event) => {
     <section class="container__chat">
       <HomeChatList :key="dinamyc_key_to_chat_list" @open-chat="openChat" />
     </section>
+
+    <Dialog
+      v-model:visible="chat_information_dialog"
+      modal
+      :style="{ width: '50vw' }"
+      :breakpoints="{ '1199px': '65vw', '575px': '90vw' }"
+    >
+      <template #container>
+        <ChatInformationModal @close="chat_information_dialog = false;" />
+      </template>
+    </Dialog>
 
     <Dialog
       v-model:visible="update_profile_dialog"
