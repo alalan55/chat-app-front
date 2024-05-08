@@ -7,17 +7,22 @@ export const useUserStore = defineStore('user', {
     activeChat: null
   }),
   actions: {
-    setActiveChat(payload){
+    setActiveChat(payload) {
       this.activeChat = payload
     },
-    resetActiveChat(){
+    resetActiveChat() {
       this.activeChat = null
     },
-    setCurrentUser(payload) {
+    setCurrentUserAndToken(payload) {
       this.user = payload.content
       this.token = payload.token
       localStorage.setItem('user', JSON.stringify(payload.content))
       localStorage.setItem('token', payload.token)
+    },
+    setCurrentUser(payload) {
+      this.user = payload
+      localStorage.removeItem('user')
+      localStorage.setItem('user', JSON.stringify(payload))
     },
     resetUserInfos() {
       this.user = null

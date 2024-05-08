@@ -6,6 +6,7 @@ const props = defineProps({
   iconRight: { type: String, default: null },
   iconLeft: { type: String, default: null },
   type: { type: String, default: "text" },
+  readonly: { type: Boolean, default: false },
 });
 
 const emit = defineEmits(["right-icon-click", "left-icon-click"]);
@@ -46,6 +47,7 @@ const inputStyle = computed(() => {
       v-model="model"
       :type="props.type"
       :style="inputStyle"
+      :readonly="readonly"
       :placeholder="props.placeholder"
     />
 

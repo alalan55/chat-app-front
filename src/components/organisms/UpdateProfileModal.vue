@@ -2,13 +2,54 @@
 // IMPORTS
 import { ref } from "vue";
 import { useUserStore } from "@/stores/user";
+import { useToast } from "primevue/usetoast";
 import TheInput from "../atoms/TheInput.vue";
 import Button from "primevue/button";
+import http from "@/services/axios";
 
 // VARIABLES
 const store = useUserStore();
 const current_user = ref(null);
+const loading = ref(false);
+const toast = useToast();
 current_user.value = { ...store.$current_user };
+
+// FUNCTIONS
+const updateUser = async () => {
+  try {
+    loading.value = true;
+    const { data } = await http.put(`${current_user.value.id}`, current_user.value);
+
+    toast.add({
+      severity: "success",
+      summary: "Sucesso!",
+      detail: "Perfil atualizado com sucesso",
+      life: 3000,
+    });
+
+    console.log(data);
+    loading.value = false;
+
+    getUserInfo();
+  } catch (e) {
+    loading.value = false;
+    toast.add({
+      severity: "error",
+      summary: "Falha",
+      detail: "Falha ao atualizar perfil",
+      life: 3000,
+    });
+  }
+};
+
+const getUserInfo = async () => {
+  try {
+    const { data } = await http.get(`${current_user.value.id}`);
+    store.setCurrentUser(data.content);
+  } catch (e) {
+    console.log(e);
+  }
+};
 </script>
 
 <template>
@@ -49,7 +90,7 @@ current_user.value = { ...store.$current_user };
         <label>
           Status
           <TheInput
-            v-model="current_user.message"
+            v-model="current_user.status"
             icon-left="pi pi-comment"
             style="margin-top: 0.8rem"
           />
@@ -82,7 +123,7 @@ current_user.value = { ...store.$current_user };
     </div>
 
     <div class="modal__footer">
-      <Button label="Atualizar" severity="info">
+      <Button :loading="loading" label="Atualizar" severity="info" @click="updateUser">
         <template #icon>
           <i class="pi pi-save" style="margin-right: 0.5rem"></i>
         </template>

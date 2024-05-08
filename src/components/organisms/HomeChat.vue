@@ -42,7 +42,6 @@ const ws = new WebSocket(url);
 
 ws.onmessage = function (event) {
   messages.value.push(event.data);
-  // console.log(event.data, "evento chegando aquiiii");
 };
 
 // FUNCTIONS

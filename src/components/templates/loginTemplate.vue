@@ -19,7 +19,7 @@ const login = async () => {
     try {
       loading.value = true;
       const { data } = await http.post("login", form);
-      store.setCurrentUser(data);
+      store.setCurrentUserAndToken(data);
       loading.value = false;
       router.push("/home");
     } catch (error) {
