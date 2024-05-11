@@ -20,7 +20,7 @@ const current_chat_infos = ref(null);
 const getChatInformation = async () => {
   try {
     const chat_id = store.$activeChat.id;
-    const { data } = await http.get(`get-chat-info/${chat_id}`);
+    const { data } = await http.get(`message/get-chat-info/${chat_id}`);
     current_chat_infos.value = data.content;
     console.log(data);
   } catch (e) {

@@ -26,7 +26,7 @@ const createUser = async () => {
   if (new_user.value.password == confirmation_pawword.value) {
     try {
       loading.value = true;
-      await http.post("/", new_user.value);
+      await http.post("auth/", new_user.value);
       loading.value = false;
 
       toast.add({

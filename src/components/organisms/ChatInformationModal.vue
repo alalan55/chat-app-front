@@ -22,7 +22,7 @@ const getChatInformation = async () => {
   try {
     loading_infos.value = true;
     const chat_id = store.$activeChat.id;
-    const { data } = await http.get(`get-chat-info/${chat_id}`);
+    const { data } = await http.get(`message/get-chat-info/${chat_id}`);
     current_chat_infos.value = data.content;
     // console.log(data, "informations hereee");
     loading_infos.value = false;

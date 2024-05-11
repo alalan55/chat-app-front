@@ -17,7 +17,7 @@ const emit = defineEmits(["back-previous-page", "get-chat-information"]);
 const store = useUserStore();
 const current_chat = ref(store.$activeChat);
 const current_user = ref(store.$current_user);
-const url = `ws://localhost:8000/connect-conversation/${current_chat.value.id}?token=${store.$token}`;
+const url = `ws://localhost:8000/message/connect-conversation/${current_chat.value.id}?token=${store.$token}`;
 const message = ref("");
 const show_emojis = ref(false);
 const menu = ref(null);

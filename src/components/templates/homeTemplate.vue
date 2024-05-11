@@ -58,7 +58,7 @@ const startConversation = async (user) => {
   friend_dialog.value = false;
 
   try {
-    await http.post("create-conversation", conversation_model);
+    await http.post("message/create-conversation", conversation_model);
     dinamyc_key_to_chat_list.value++;
 
     console.log("chamar o open chat passando o id da conversation para abrir a conversa");

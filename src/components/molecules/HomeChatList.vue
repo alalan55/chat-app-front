@@ -17,7 +17,7 @@ const loading_chat = ref(false);
 const getChats = async () => {
   try {
     loading_chat.value = true;
-    const { data } = await http.get("chat-list");
+    const { data } = await http.get("message/chat-list");
     chat_list.value = data.content;
     console.log(data.content, "lista de conversations");
     loading_chat.value = false;

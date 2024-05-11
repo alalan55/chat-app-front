@@ -18,7 +18,7 @@ const login = async () => {
   if (form.email && form.password) {
     try {
       loading.value = true;
-      const { data } = await http.post("login", form);
+      const { data } = await http.post("auth/login", form);
       store.setCurrentUserAndToken(data);
       loading.value = false;
       router.push("/home");

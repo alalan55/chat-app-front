@@ -64,7 +64,7 @@ const createGroup = async () => {
   group_model.name = group_name.value;
 
   try {
-    await http.post("create-conversation", group_model);
+    await http.post("message/create-conversation", group_model);
 
     toast.add({
       severity: "sucess",
