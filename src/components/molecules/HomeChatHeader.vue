@@ -2,6 +2,7 @@
 // IMPORTS
 import { ref } from "vue";
 import { useUserStore } from "@/stores/user";
+import { useClipboard } from "@vueuse/core";
 import TheInput from "../atoms/TheInput.vue";
 import Menu from "primevue/menu";
 
@@ -44,6 +45,7 @@ const items = ref([
   },
 ]);
 const store = useUserStore();
+const { copy } = useClipboard();
 
 // FUNCTIONS
 const chooseOption = (e) => emit("openOptionDialog", e);
@@ -58,7 +60,9 @@ const toggleOptionsMenu = (event) => {
     <div class="wrapper__profile">
       <div class="box-image">
         <figure @click="emit('open-profile')"></figure>
-        <small># {{ store.$current_user?.shared_id || "" }}</small>
+        <small @click="copy(store.$current_user?.shared_id)">
+          # {{ store.$current_user?.shared_id || "" }}
+        </small>
       </div>
       <div class="actions">
         <i
@@ -129,6 +133,7 @@ const toggleOptionsMenu = (event) => {
       small {
         font-weight: 600;
         font-size: 0.75rem;
+        cursor: pointer;
       }
     }
 

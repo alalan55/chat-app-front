@@ -3,6 +3,7 @@
 import { ref } from "vue";
 import { useUserStore } from "@/stores/user";
 import { useToast } from "primevue/usetoast";
+import { useClipboard } from "@vueuse/core";
 import http from "@/services/axios";
 import Skeleton from "primevue/skeleton";
 import Button from "primevue/button";
@@ -16,6 +17,7 @@ const store = useUserStore();
 const toast = useToast();
 const current_chat_infos = ref(null);
 const loading_infos = ref(false);
+const { copy } = useClipboard();
 
 // FUNCTIONS
 const getChatInformation = async () => {
@@ -113,7 +115,7 @@ getChatInformation();
                 <figure></figure>
                 <div class="texts">
                   <span>{{ user.name }} </span>
-                  <small># {{ user.shared_id }}</small>
+                  <small @click="copy(user.shared_id)"># {{ user.shared_id }}</small>
                 </div>
               </div>
               <div class="right">
@@ -324,6 +326,7 @@ getChatInformation();
             }
             small {
               font-size: 0.7rem;
+              cursor: pointer;
             }
           }
         }
@@ -390,10 +393,14 @@ getChatInformation();
       gap: 1rem;
       .texts {
         text-align: center;
-        bo strong {
+        strong {
           font-size: 1.6rem;
           font-weight: 800;
           color: #303030;
+        }
+
+        small {
+          cursor: pointer;
         }
 
         p {
