@@ -107,13 +107,15 @@ const store = useUserStore();
     .figure-cover {
       width: 100%;
       height: 100%;
-      border-radius: 10px;
+      border-radius: 15px;
       overflow: hidden;
+     
 
       img {
         width: 100%;
         height: 100%;
         object-fit: cover;
+      
       }
     }
 
@@ -123,13 +125,14 @@ const store = useUserStore();
       display: flex;
       align-items: center;
       justify-content: center;
-      bottom: -65px;
+      bottom: -70px;
       .figure-profile {
         width: 200px;
         height: 200px;
         border-radius: 50%;
         background: #cdcdcd;
         overflow: hidden;
+        border: 8px solid #fff;
 
         img {
           width: 100%;

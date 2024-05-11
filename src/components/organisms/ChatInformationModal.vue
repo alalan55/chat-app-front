@@ -360,6 +360,7 @@ getChatInformation();
         height: 100%;
         border-radius: 10px;
         overflow: hidden;
+       
 
         img {
           width: 100%;
@@ -378,11 +379,13 @@ getChatInformation();
         left: 50%;
         transform: translate(-50%, -60%);
         overflow: hidden;
+        border: 8px solid #fff;
 
         img {
           width: 100%;
           height: 100%;
           object-fit: cover;
+          
         }
       }
     }
