@@ -27,15 +27,56 @@ const store = useUserStore();
         @click="emit('back-previous-page')"
       />
     </div>
+
+    <div class="profile__cover">
+      <figure class="figure-cover">
+        <img src="/img/bg3.jpg" alt="" />
+      </figure>
+
+      <div class="profile__cover__user-box">
+        <figure class="figure-profile">
+          <img src="/img/eu.jpg" alt="" />
+        </figure>
+      </div>
+    </div>
+
     <div class="profile__middle">
-      <figure></figure>
-      <span class="name">{{ store.$current_user?.name || "Nome não encontrado" }}</span>
-      <small>{{ store.$current_user?.email || "E-mail não encontrado" }}</small>
+      <div class="profile__middle__presentation">
+        <span class="name">
+          {{ store.$current_user?.name || "Nome não encontrado" }}
+        </span>
+
+        <small>
+          {{ store.$current_user?.email || "E-mail não encontrado" }}
+        </small>
+      </div>
 
       <div class="profile__middle__description">
-        <span>
-          {{ store.$current_user?.status || message_default }}
-        </span>
+        <p>
+          <cite>
+            {{ store.$current_user?.status || message_default }}
+          </cite>
+        </p>
+      </div>
+
+      <div class="profile__middle__metrics">
+        <div class="profile__middle__metrics__item">
+          <strong> {{ store.$current_user.groups_quantity || "0" }}</strong>
+
+          <small>Grupos</small>
+        </div>
+
+        <div class="profile__middle__metrics__item">
+          <strong> {{ store.$current_user.messages_quantity || "0" }}</strong>
+
+          <small>Mensagens enviadas</small>
+        </div>
+
+        <div class="profile__middle__metrics__item">
+          <strong> {{ store.$current_user.friends_quantity || "0" }}</strong>
+
+          <small>Amigos</small>
+        </div>
       </div>
     </div>
   </div>
@@ -45,38 +86,110 @@ const store = useUserStore();
 .profile {
   width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
-
-  justify-content: center;
   padding: 1rem;
   gap: 1.5rem;
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  &__header {
+    position: absolute;
+    z-index: 10;
+    right: 15px;
+  }
+
+  &__cover {
+    height: 40vh;
+    height: 40dvh;
+    margin-bottom: 3.3rem;
+    position: relative;
+
+    .figure-cover {
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    &__user-box {
+      position: absolute;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      bottom: -65px;
+      .figure-profile {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background: #cdcdcd;
+        overflow: hidden;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+    }
+  }
 
   &__middle {
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 0.3rem;
+    // justify-content: center;
+    justify-content: space-between;
+    gap: 0.1rem;
 
-    figure {
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      background: #cdcdcd;
-      margin-bottom: 1.2rem;
+    & > div {
+      // border: 1px solid red;
     }
 
-    .name {
-      font-weight: 600;
-      font-size: 1.5rem;
+    &__presentation {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+
+      .name {
+        font-weight: 700;
+        font-size: 1.5rem;
+      }
     }
 
     &__description {
       margin-top: 1rem;
       text-align: center;
-      max-width: 70%;
+      max-width: 85%;
+    }
+
+    &__metrics {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      width: 100%;
+      margin-top: 0.8rem;
+      &__item {
+        padding: 0.8rem;
+        flex: 1 1 100px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.4rem;
+        text-align: center;
+
+        small {
+          font-weight: 500;
+        }
+      }
     }
   }
 }
