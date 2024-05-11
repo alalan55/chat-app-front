@@ -10,7 +10,14 @@ const router = useRouter();
 const showMessage = ref(false);
 const showMessageConfirmation = ref(false);
 const loading = ref(false);
-const new_user = ref({ name: "", email: "", password: "" });
+const new_user = ref({
+  name: "",
+  email: "",
+  password: "",
+  profile_pic: "",
+  coverage_pic: "",
+  status: "",
+});
 const confirmation_pawword = ref("");
 
 const toast = useToast();
@@ -19,14 +26,16 @@ const createUser = async () => {
   if (new_user.value.password == confirmation_pawword.value) {
     try {
       loading.value = true;
-      await http.post("", new_user.value);
+      await http.post("auth/", new_user.value);
       loading.value = false;
+
       toast.add({
         severity: "success",
         summary: "success",
         detail: "Contra criada com sucesso",
         life: 3000,
       });
+      loading.value = false;
       router.push("/");
     } catch (error) {
       toast.add({
@@ -35,6 +44,7 @@ const createUser = async () => {
         detail: "Erro ao criar conta",
         life: 3000,
       });
+      loading.value = false;
     }
   } else {
     toast.add({
@@ -54,7 +64,7 @@ const createUser = async () => {
         <small>Insira as informações abaixo e inscreva-se :)</small>
       </div>
 
-      <form @submit.prevent class="login__card__body">
+      <form class="login__card__body">
         <label>
           E-mail
 

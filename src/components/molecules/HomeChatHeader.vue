@@ -1,9 +1,21 @@
 <script setup>
+// IMPORTS
 import { ref } from "vue";
+import { useUserStore } from "@/stores/user";
+import { useClipboard } from "@vueuse/core";
 import TheInput from "../atoms/TheInput.vue";
 import Menu from "primevue/menu";
 
-const emit = defineEmits(["openOptionDialog", "open-profile"]);
+// EMITS
+const emit = defineEmits([
+  "openOptionDialog",
+  "open-profile",
+  "open-friends-list",
+  "add-friend",
+  "new-group",
+]);
+
+// VARIABLES
 const menu = ref();
 const items = ref([
   {
@@ -24,10 +36,18 @@ const items = ref([
         icon: "pi pi-user-edit",
         type: 2,
       },
+      {
+        label: "Logout",
+        icon: "pi pi-sign-out",
+        type: 3,
+      },
     ],
   },
 ]);
+const store = useUserStore();
+const { copy } = useClipboard();
 
+// FUNCTIONS
 const chooseOption = (e) => emit("openOptionDialog", e);
 
 const toggleOptionsMenu = (event) => {
@@ -38,18 +58,23 @@ const toggleOptionsMenu = (event) => {
 <template>
   <div class="wrapper">
     <div class="wrapper__profile">
-      <figure @click="$emit('open-profile')"></figure>
+      <div class="box-image">
+        <figure @click="emit('open-profile')"></figure>
+        <small @click="copy(store.$current_user?.shared_id)">
+          # {{ store.$current_user?.shared_id || "" }}
+        </small>
+      </div>
       <div class="actions">
         <i
           v-tooltip="'Nova conversa'"
           class="pi pi-users"
-          @click="$emit('open-friends-list')"
+          @click="emit('open-friends-list')"
         />
-        <i v-tooltip="'Novo grupo'" class="pi pi-comments" />
+        <i v-tooltip="'Novo grupo'" class="pi pi-comments" @click="emit('new-group')" />
         <i
           v-tooltip="'Adicionar amigo'"
           class="pi pi-user-plus"
-          @click="$emit('add-friend')"
+          @click="emit('add-friend')"
         />
         <i
           v-tooltip="'Mais opções'"
@@ -93,22 +118,34 @@ const toggleOptionsMenu = (event) => {
     justify-content: space-between;
     padding: 1.5rem;
 
-    figure {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: #cdcdcd;
-      cursor: pointer;
+    .box-image {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      figure {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: #cdcdcd;
+        cursor: pointer;
+      }
+
+      small {
+        font-weight: 600;
+        font-size: 0.75rem;
+        cursor: pointer;
+      }
     }
 
     .actions {
       display: flex;
       align-items: center;
-      gap: 1.3rem;
+      gap: 1.1rem;
       i {
         // font-size: 1.12rem;
         color: #505b6d;
         cursor: pointer;
+        font-size: 0.95rem;
       }
 
       .item-menu {

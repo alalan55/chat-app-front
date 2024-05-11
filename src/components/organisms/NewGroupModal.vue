@@ -1,126 +1,35 @@
 <script setup>
+// IMPORTS
 import { ref, watch } from "vue";
 import TheInput from "../atoms/TheInput.vue";
 import { useToast } from "primevue/usetoast";
 import http from "@/services/axios";
 import Skeleton from "primevue/skeleton";
+import Button from "primevue/button";
+import Dialog from "primevue/dialog";
 
+// VARIABLES
 const loading = ref(false);
 const search = ref("");
 const filtered = ref([]);
 const users = ref([]);
+const users_list_group = ref([]);
+const group_name = ref("");
+const confirmation_dialog = ref(false);
+const loading_creation = ref(false);
 const toast = useToast();
 
-// const mock_users = [
-//   {
-//     name: "Bob Taylor",
-//     age: 32,
-//     email: "bob.taylor@example.com",
-//   },
-//   {
-//     name: "Charlie Miller",
-//     age: 22,
-//     email: "charlie.miller@example.com",
-//   },
-//   {
-//     name: "David Jones",
-//     age: 64,
-//     email: "david.jones@example.com",
-//   },
-//   {
-//     name: "Charlie Brown",
-//     age: 69,
-//     email: "charlie.brown@example.com",
-//   },
-//   {
-//     name: "Emma Davis",
-//     age: 47,
-//     email: "emma.davis@example.com",
-//   },
-//   {
-//     name: "Emma Davis",
-//     age: 20,
-//     email: "emma.davis@example.com",
-//   },
-//   {
-//     name: "Charlie Moore",
-//     age: 38,
-//     email: "charlie.moore@example.com",
-//   },
-//   {
-//     name: "Emma Smith",
-//     age: 67,
-//     email: "emma.smith@example.com",
-//   },
-//   {
-//     name: "David Jones",
-//     age: 30,
-//     email: "david.jones@example.com",
-//   },
-//   {
-//     name: "Bob Taylor",
-//     age: 45,
-//     email: "bob.taylor@example.com",
-//   },
-//   {
-//     name: "Henry Johnson",
-//     age: 24,
-//     email: "henry.johnson@example.com",
-//   },
-//   {
-//     name: "Jack Moore",
-//     age: 50,
-//     email: "jack.moore@example.com",
-//   },
-//   {
-//     name: "Grace Miller",
-//     age: 24,
-//     email: "grace.miller@example.com",
-//   },
-//   {
-//     name: "David Smith",
-//     age: 41,
-//     email: "david.smith@example.com",
-//   },
-//   {
-//     name: "Charlie Jones",
-//     age: 24,
-//     email: "charlie.jones@example.com",
-//   },
-//   {
-//     name: "Charlie Brown",
-//     age: 57,
-//     email: "charlie.brown@example.com",
-//   },
-//   {
-//     name: "Grace Johnson",
-//     age: 22,
-//     email: "grace.johnson@example.com",
-//   },
-//   {
-//     name: "Grace Brown",
-//     age: 48,
-//     email: "grace.brown@example.com",
-//   },
-//   {
-//     name: "Henry Miller",
-//     age: 48,
-//     email: "henry.miller@example.com",
-//   },
-//   {
-//     name: "Jack Davis",
-//     age: 43,
-//     email: "jack.davis@example.com",
-//   },
-// ];
+// EMITS
 
+const emit = defineEmits(["close"]);
+
+// FUNCTIONS
 const getUsersList = async () => {
   try {
     loading.value = true;
     const { data } = await http.get("user/friends");
     users.value = data.content;
     loading.value = false;
-   
   } catch (e) {
     loading.value = false;
     toast.add({
@@ -132,6 +41,53 @@ const getUsersList = async () => {
   }
 };
 
+const handleUsersToGroup = (user) => {
+  const idx = users_list_group.value.findIndex((e) => e.id == user.id);
+
+  if (idx >= 0) {
+    users_list_group.value.splice(idx, 1);
+  } else {
+    users_list_group.value.push(user);
+  }
+};
+
+const isOnList = (user) => {
+  const founded = users_list_group.value.findIndex((e) => e.id == user.id);
+  return founded >= 0;
+};
+
+const createGroup = async () => {
+  loading_creation.value = true;
+  const group_model = {};
+  group_model.friends_list = users_list_group.value.map((el) => el.id);
+  group_model.conversation_type = 1;
+  group_model.name = group_name.value;
+
+  try {
+    await http.post("message/create-conversation", group_model);
+
+    toast.add({
+      severity: "sucess",
+      summary: "Sucesso",
+      detail: "Grupo criado com sucesso",
+      life: 3000,
+    });
+
+    loading_creation.value = false;
+
+    emit("close", true);
+  } catch (e) {
+    toast.add({
+      severity: "error",
+      summary: "Falha",
+      detail: "Error ao criar grupo",
+      life: 3000,
+    });
+    loading_creation.value = false;
+  }
+};
+
+// WATCHERS
 watch(search, (nv) => {
   filtered.value = users.value.filter((user) =>
     user.name.toLocaleLowerCase().includes(nv.toLocaleLowerCase())
@@ -146,11 +102,13 @@ getUsersList();
     <div class="modal__header">
       <div class="left">
         <div class="title">
-          <span>Nova conversa</span>
+          <span>Novo grupo</span>
+          <br />
+          <small>Selecione ao menos 2 usuários para criar um grupo</small>
         </div>
       </div>
       <div class="right">
-        <i class="pi pi-times" @click="$emit('close')"></i>
+        <i class="pi pi-times" @click="emit('close')"></i>
       </div>
     </div>
 
@@ -165,7 +123,11 @@ getUsersList();
     <div class="modal__body">
       <div class="modal__body__list">
         <template v-for="(item, i) in search.length ? filtered : users" :key="i">
-          <div class="friend" @click="$emit('start-conversation', item)">
+          <div
+            class="friend"
+            :class="{ active: isOnList(item) }"
+            @click="handleUsersToGroup(item)"
+          >
             <figure></figure>
             <span>{{ item.name }}</span>
           </div>
@@ -189,6 +151,51 @@ getUsersList();
         <span>Nenhum usuário encontrado😬</span>
       </div>
     </div>
+
+    <div class="modal__footer">
+      <Button
+        label="Criar grupo"
+        severity="info"
+        :disabled="users_list_group.length < 2"
+        @click="confirmation_dialog = true"
+      />
+    </div>
+
+    <Dialog
+      v-model:visible="confirmation_dialog"
+      modal
+      :style="{ width: '40vw' }"
+      :breakpoints="{ '1199px': '45vw', '575px': '90vw' }"
+    >
+      <template #container>
+        <div class="modal__confirmation">
+          <div class="modal__confirmation__body">
+            <span>Insira abaixo o nome para a criação do grupo</span>
+            <TheInput v-model="group_name" placeholder="Nome do grupo" />
+          </div>
+          <div class="modal__confirmation__footer">
+            <Button
+              outlined
+              size="small"
+              label="Cancelar"
+              severity="info"
+              @click="
+                confirmation_dialog = false;
+                group_name = '';
+              "
+            />
+            <Button
+              size="small"
+              label="Criar"
+              severity="info"
+              :loading="loading_creation"
+              :disabled="loading_creation"
+              @click="createGroup"
+            />
+          </div>
+        </div>
+      </template>
+    </Dialog>
   </div>
 </template>
 
@@ -244,6 +251,7 @@ getUsersList();
         box-shadow: -6px 10px 28px -12px rgba(0, 0, 0, 0.15);
         cursor: pointer;
         transition: 0.2s ease-in;
+        border: 2px solid transparent;
 
         figure {
           background: #cdcdcd;
@@ -274,6 +282,10 @@ getUsersList();
           box-shadow: -6px 10px 28px -12px rgba(0, 0, 0, 0.25);
         }
       }
+
+      .active {
+        border: 2px solid #0ea5e9;
+      }
       .friend-loading {
         display: flex;
         align-items: center;
@@ -288,6 +300,37 @@ getUsersList();
       span {
         font-weight: 600;
       }
+    }
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  &__confirmation {
+    padding: 1rem;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    &__body {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      span {
+        font-weight: 500;
+        font-size: 0.9rem;
+      }
+    }
+
+    &__footer {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      justify-content: flex-end;
     }
   }
 }

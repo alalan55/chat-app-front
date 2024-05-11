@@ -1,6 +1,54 @@
 <script setup>
+// IMPORTS
+import { ref } from "vue";
+import { useUserStore } from "@/stores/user";
+import { useToast } from "primevue/usetoast";
 import TheInput from "../atoms/TheInput.vue";
 import Button from "primevue/button";
+import http from "@/services/axios";
+
+// VARIABLES
+const store = useUserStore();
+const current_user = ref(null);
+const loading = ref(false);
+const toast = useToast();
+current_user.value = { ...store.$current_user };
+
+// FUNCTIONS
+const updateUser = async () => {
+  try {
+    loading.value = true;
+    const { data } = await http.put(`user/${current_user.value.id}`, current_user.value);
+
+    toast.add({
+      severity: "success",
+      summary: "Sucesso!",
+      detail: `${data.message ? data.message : "Perfil atualizado com sucesso"}`,
+      life: 3000,
+    });
+
+    loading.value = false;
+
+    getUserInfo();
+  } catch (e) {
+    loading.value = false;
+    toast.add({
+      severity: "error",
+      summary: "Falha",
+      detail: "Falha ao atualizar perfil",
+      life: 3000,
+    });
+  }
+};
+
+const getUserInfo = async () => {
+  try {
+    const { data } = await http.get(`user/${current_user.value.id}`);
+    store.setCurrentUser(data.content);
+  } catch (e) {
+    console.log(e);
+  }
+};
 </script>
 
 <template>
@@ -24,31 +72,59 @@ import Button from "primevue/button";
       <div class="modal__body__form">
         <label>
           E-mail
-          <TheInput icon-left="pi pi-at" style="margin-top: 0.8rem" />
+          <TheInput
+            v-model="current_user.email"
+            icon-left="pi pi-at"
+            style="margin-top: 0.8rem"
+          />
         </label>
         <label>
           Nome
-          <TheInput icon-left="pi pi-user" style="margin-top: 0.8rem" />
+          <TheInput
+            v-model="current_user.name"
+            icon-left="pi pi-user"
+            style="margin-top: 0.8rem"
+          />
         </label>
         <label>
-          Recado
-          <TheInput icon-left="pi pi-comment" style="margin-top: 0.8rem" />
+          Status
+          <TheInput
+            v-model="current_user.status"
+            icon-left="pi pi-comment"
+            style="margin-top: 0.8rem"
+          />
         </label>
         <label>
-          Senha
-          <TheInput icon-left="pi pi-lock" :icon-right="'pi pi-eye'"  style="margin-top: 0.8rem" />
+          Senha atual
+          <TheInput
+            icon-left="pi pi-lock"
+            :icon-right="'pi pi-eye'"
+            style="margin-top: 0.8rem"
+          />
+        </label>
+        <label>
+          Nova senha
+          <TheInput
+            icon-left="pi pi-lock"
+            :icon-right="'pi pi-eye'"
+            style="margin-top: 0.8rem"
+          />
         </label>
         <label>
           Confirmação de senha
-          <TheInput icon-left="pi pi-lock" :icon-right="'pi pi-eye'"  style="margin-top: 0.8rem" />
+          <TheInput
+            icon-left="pi pi-lock"
+            :icon-right="'pi pi-eye'"
+            style="margin-top: 0.8rem"
+          />
         </label>
       </div>
     </div>
 
     <div class="modal__footer">
-      <Button label="Atualizar"   severity="info">
+      <Button :loading="loading" label="Atualizar" severity="info" @click="updateUser">
         <template #icon>
-          <i class="pi pi-save" style="margin-right: .5rem;"></i>
+          <i class="pi pi-save" style="margin-right: 0.5rem"></i>
         </template>
       </Button>
     </div>
@@ -86,7 +162,7 @@ import Button from "primevue/button";
   }
 
   &__body {
-    padding: .5rem;
+    padding: 0.5rem;
     flex: 1;
     overflow: auto;
     @include trackScrollBar;
@@ -105,9 +181,9 @@ import Button from "primevue/button";
         border-radius: 50%;
         background: #cdcdcd;
 
-        @media(max-width:750px){
+        @media (max-width: 750px) {
           width: 180px;
-        height: 180px;
+          height: 180px;
         }
       }
     }
@@ -117,12 +193,12 @@ import Button from "primevue/button";
       gap: 1rem;
       grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
 
-      label{
+      label {
         font-weight: 500;
-        font-size: .9rem;
+        font-size: 0.9rem;
       }
 
-      @media(max-width:750px){
+      @media (max-width: 750px) {
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
@@ -130,7 +206,7 @@ import Button from "primevue/button";
     }
   }
 
-  &__footer{
+  &__footer {
     display: flex;
     align-items: center;
     justify-content: center;

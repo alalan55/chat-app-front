@@ -18,8 +18,8 @@ const login = async () => {
   if (form.email && form.password) {
     try {
       loading.value = true;
-      const { data } = await http.post("login", form);
-      store.setCurrentUser(data);
+      const { data } = await http.post("auth/login", form);
+      store.setCurrentUserAndToken(data);
       loading.value = false;
       router.push("/home");
     } catch (error) {
@@ -40,6 +40,8 @@ const login = async () => {
     });
   }
 };
+
+store.resetUserInfos()
 </script>
 
 <template>
