@@ -18,16 +18,15 @@ current_user.value = { ...store.$current_user };
 const updateUser = async () => {
   try {
     loading.value = true;
-    const { data } = await http.put(`${current_user.value.id}`, current_user.value);
+    const { data } = await http.put(`user/${current_user.value.id}`, current_user.value);
 
     toast.add({
       severity: "success",
       summary: "Sucesso!",
-      detail: "Perfil atualizado com sucesso",
+      detail: `${data.message ? data.message : "Perfil atualizado com sucesso"}`,
       life: 3000,
     });
 
-    console.log(data);
     loading.value = false;
 
     getUserInfo();
@@ -44,7 +43,7 @@ const updateUser = async () => {
 
 const getUserInfo = async () => {
   try {
-    const { data } = await http.get(`${current_user.value.id}`);
+    const { data } = await http.get(`user/${current_user.value.id}`);
     store.setCurrentUser(data.content);
   } catch (e) {
     console.log(e);

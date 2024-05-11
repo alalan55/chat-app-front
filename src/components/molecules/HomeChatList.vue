@@ -31,7 +31,10 @@ getChats();
 </script>
 
 <template>
-  <!-- <button @click="getChats()">FORCE RELOAD</button> -->
+  <!-- <pre>
+    {{ store.$token }}
+  </pre>
+  <button @click="getChats()">FORCE RELOAD</button> -->
 
   <div class="chat-list">
     <div v-if="chat_list.length && !loading_chat" class="chat-list__list">
@@ -41,8 +44,6 @@ getChats();
             <figure></figure>
             <div class="texts">
               <strong>{{ item.conversation_name }}</strong>
-              <!-- <br />
-            <small>Alguma mensagem...</small> -->
             </div>
           </div>
 

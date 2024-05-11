@@ -34,7 +34,7 @@ const store = useUserStore();
 
       <div class="profile__middle__description">
         <span>
-          {{ store.$current_user?.description || message_default }}
+          {{ store.$current_user?.status || message_default }}
         </span>
       </div>
     </div>

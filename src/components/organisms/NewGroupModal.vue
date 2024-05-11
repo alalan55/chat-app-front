@@ -27,7 +27,7 @@ const emit = defineEmits(["close"]);
 const getUsersList = async () => {
   try {
     loading.value = true;
-    const { data } = await http.get("friends");
+    const { data } = await http.get("user/friends");
     users.value = data.content;
     loading.value = false;
   } catch (e) {

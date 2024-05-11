@@ -48,7 +48,7 @@ const mock_users = [
 const getFriendsRequest = async () => {
   try {
     loading.value = true;
-    const { data } = await http.get("friends-request");
+    const { data } = await http.get("user/friends-request");
 
     friends_requests_pending.value = data.content.filter(
       (info) => info.friend_status == "pending"
@@ -72,7 +72,7 @@ const manageFriendRequest = async (user_to_add, accepted) => {
   try {
     loading_manage_request.value = true;
     const { data } = http.get(
-      `manage-friendship?user_to_add_id=${user_to_add}&friendship_accept=${accepted}`
+      `user/manage-friendship?user_to_add_id=${user_to_add}&friendship_accept=${accepted}`
     );
    
     loading_manage_request.value = false;

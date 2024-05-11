@@ -15,7 +15,7 @@ async function addFriend() {
   if (user_id.value.length) {
     try {
       loading.value = true;
-      const { data } = await http.get(`add-friend?user_to_add_id=${user_id.value}`);
+      const { data } = await http.get(`user/add-friend?user_to_add_id=${user_id.value}`);
 
       let info = { severity: "", summary: "" };
 
