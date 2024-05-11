@@ -156,6 +156,32 @@ getChatInformation();
               >
             </p>
           </div>
+
+          <div class="metrics">
+            <div class="metrics__item">
+              <strong>
+                {{ current_chat_infos?.participants.groups_quantity || "0" }}</strong
+              >
+
+              <small>Grupos</small>
+            </div>
+
+            <div class="metrics__item">
+              <strong>
+                {{ current_chat_infos?.participants.messages_quantity || "0" }}</strong
+              >
+
+              <small>Mensagens enviadas</small>
+            </div>
+
+            <div class="metrics__item">
+              <strong>
+                {{ current_chat_infos?.participants.friends_quantity || "0" }}</strong
+              >
+
+              <small>Amigos</small>
+            </div>
+          </div>
         </div>
       </div>
     </template>
@@ -359,6 +385,9 @@ getChatInformation();
     }
 
     &__content {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
       .texts {
         text-align: center;
         bo strong {
@@ -371,6 +400,25 @@ getChatInformation();
           text-align: justify;
           display: block;
           margin-top: 1.5rem;
+        }
+      }
+
+      .metrics {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        &__item {
+          padding: 0.8rem;
+          flex: 1 1 100px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0.4rem;
+          text-align: center;
+
+          small {
+            font-weight: 500;
+          }
         }
       }
     }
