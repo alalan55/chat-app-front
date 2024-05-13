@@ -16,7 +16,6 @@ import StartupModal from "../organisms/StartupModal.vue";
 import HomeChat from "../organisms/HomeChat.vue";
 import NewGroupModal from "../organisms/NewGroupModal.vue";
 import ChatInformationModal from "../organisms/ChatInformation/index.vue";
-import CurrentChatInformation from "../organisms/CurrentChatInformation.vue";
 import Dialog from "primevue/dialog";
 
 // VARIABLES
@@ -37,15 +36,12 @@ const pages = {
   UserProfile,
   StartupModal,
   HomeChat,
-  CurrentChatInformation,
 };
 
 // FUNCTIONS
 const getChatInformation = () => {
-  // current_component_screen.value = "CurrentChatInformation";
   // console.log(chat_id);
-  chat_information_dialog.value = true
-  console.log(chat_information_dialog.value, 'chat hereee')
+  chat_information_dialog.value = true;
 };
 
 const openFriendsListModal = () => {
@@ -76,15 +72,13 @@ const chooseOptionModal = (e) => {
   if (e.type == 3) router.push("/");
 };
 
-const setProfileToScreen = () => current_component_screen.value = "UserProfile";
-
+const setProfileToScreen = () => (current_component_screen.value = "UserProfile");
 
 const openChat = (chat_id) => {
   store.resetActiveChat();
   store.setActiveChat(chat_id);
   current_component_screen.value = "HomeChat";
   dinamyc_key_to_content_screen.value++;
-
 };
 
 const closeGroupDialog = (event) => {
@@ -127,7 +121,7 @@ const closeGroupDialog = (event) => {
       :breakpoints="{ '1199px': '65vw', '575px': '90vw' }"
     >
       <template #container>
-        <ChatInformationModal @close="chat_information_dialog = false;" />
+        <ChatInformationModal @close="chat_information_dialog = false" />
       </template>
     </Dialog>
 

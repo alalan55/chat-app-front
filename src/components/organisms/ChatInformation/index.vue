@@ -57,6 +57,11 @@ getChatInformation();
       />
     </div>
 
+    <!-- LOADING DE INFOMAÇÕES -->
+    <template v-if="loading_infos">
+      <InfoModalLoading loading_infos />
+    </template>
+
     <!-- CONVERSA EM GRUPO  -->
     <template v-if="current_chat_infos?.conversation_type && !loading_infos">
       <InfoModalGroup
@@ -71,11 +76,6 @@ getChatInformation();
         :current_chat_infos="current_chat_infos"
         :loading_infos="loading_infos"
       />
-    </template>
-
-    <!-- LOADING DE INFOMAÇÕES -->
-    <template v-if="loading_infos">
-      <InfoModalLoading loading_infos />
     </template>
   </div>
 </template>
