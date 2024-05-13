@@ -14,9 +14,9 @@ import UserProfile from "../organisms/UserProfile.vue";
 import UpdateProfileModal from "../organisms/UpdateProfileModal.vue";
 import StartupModal from "../organisms/StartupModal.vue";
 import HomeChat from "../organisms/HomeChat.vue";
-import CurrentChatInformation from "../organisms/CurrentChatInformation.vue";
 import NewGroupModal from "../organisms/NewGroupModal.vue";
-import ChatInformationModal from "../organisms/ChatInformationModal.vue";
+import ChatInformationModal from "../organisms/ChatInformation/index.vue";
+import CurrentChatInformation from "../organisms/CurrentChatInformation.vue";
 import Dialog from "primevue/dialog";
 
 // VARIABLES
