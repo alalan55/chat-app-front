@@ -1,6 +1,6 @@
 <script setup>
 // IMPORTS
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useUserStore } from "@/stores/user";
 import Button from "primevue/button";
 import Menu from "primevue/menu";
@@ -14,6 +14,7 @@ const emit = defineEmits(["back-previous-page", "get-chat-information"]);
 // VARIABLES
 // const id = Date.now();
 // const socket = ref(null);
+const body = ref(null);
 const store = useUserStore();
 const current_chat = ref(store.$activeChat);
 const current_user = ref(store.$current_user);
@@ -60,6 +61,7 @@ const sendMenssage = (e) => {
 
     ws.send(parsed);
     message.value = "";
+    forceScroll();
   }
 };
 
@@ -84,6 +86,15 @@ const formateToJson = (datas) => {
 
   return infos;
 };
+
+const forceScroll = () => (body.value.scrollTop = body.value.scrollHeight);
+
+// MOUNTED HOOK
+onMounted(() => {
+  setTimeout(() => {
+    forceScroll();
+  }, 500);
+});
 </script>
 
 <template>
@@ -128,7 +139,7 @@ const formateToJson = (datas) => {
       </div>
     </div>
 
-    <div class="profile__body">
+    <div ref="body" class="profile__body">
       <ul>
         <template v-for="item in formateToJson(messages)" :key="item.id">
           <!-- {{ store.$activeChat }} -->
@@ -232,6 +243,7 @@ const formateToJson = (datas) => {
     // margin: 0 1rem;
     border-radius: 5px;
     overflow-y: auto;
+    scroll-behavior: smooth;
     @include trackScrollBar;
     // margin-top: 1rem;
     padding: 0.5rem 1rem;
