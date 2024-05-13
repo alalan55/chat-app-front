@@ -8,6 +8,7 @@ import http from "@/services/axios";
 import Skeleton from "primevue/skeleton";
 import Button from "primevue/button";
 import Badge from "primevue/badge";
+import Menu from "primevue/menu";
 
 // EMITS
 const emit = defineEmits(["back-previous-page", "close"]);
@@ -17,6 +18,30 @@ const store = useUserStore();
 const toast = useToast();
 const current_chat_infos = ref(null);
 const loading_infos = ref(false);
+const menu = ref();
+const items = ref([
+  {
+    label: "Opções",
+    items: [
+      {
+        label: "Tornar admin",
+        icon: "pi pi-pencil",
+        type: 0,
+      },
+      {
+        label: "Visualizar Perfil",
+        icon: "pi pi-user",
+        type: 2,
+      },
+      {
+        label: "Remover usuário",
+        icon: "pi pi-times",
+        type: 1,
+      },
+    ],
+  },
+]);
+const menu_options = ref([]);
 const { copy } = useClipboard();
 
 // FUNCTIONS
@@ -38,6 +63,25 @@ const getChatInformation = async () => {
     loading_infos.value = false;
   }
 };
+
+const toggleOptionsMenu = (event, user) => {
+  const can_show_make_admin = current_chat_infos.value.created_by == user.id;
+
+  //visão geral
+
+  // visão de usuário que é admin
+
+  // visão de usuário que é admin, porém não é ele que foi clicado
+
+  if (!can_show_make_admin) {
+    menu_options.value = items.value;
+  } else {
+    menu_options.value = items.value[0].items.filter((e) => e.type != 0);
+  }
+  menu.value.toggle(event);
+};
+
+// COMPUTEDS
 
 getChatInformation();
 </script>
@@ -80,8 +124,6 @@ getChatInformation();
       </div>
 
       <div class="profile__body-group">
-        <!-- <span> {{ current_chat_infos.participants.length }} membros</span> -->
-
         <ul>
           <template v-if="loading_infos">
             <li v-for="item in 3" :key="item" class="user">
@@ -110,6 +152,9 @@ getChatInformation();
               v-for="user in current_chat_infos?.participants"
               :key="user.id"
               class="user"
+              aria-haspopup="true"
+              aria-controls="overlay_menu"
+              @click="toggleOptionsMenu($event, user)"
             >
               <div class="left">
                 <figure></figure>
@@ -126,6 +171,22 @@ getChatInformation();
                 />
               </div>
             </li>
+            <Menu ref="menu" id="overlay_menu" :model="menu_options" :popup="true">
+              <template #item="{ item }">
+                <div
+                  style="
+                    gap: 0.8rem;
+                    display: flex;
+                    align-items: center;
+                    padding: 0.5rem;
+                    cursor: pointer;
+                  "
+                >
+                  <i :class="item.icon" />
+                  <span>{{ item.label }}</span>
+                </div>
+              </template>
+            </Menu>
           </template>
         </ul>
       </div>
@@ -360,7 +421,6 @@ getChatInformation();
         height: 100%;
         border-radius: 10px;
         overflow: hidden;
-       
 
         img {
           width: 100%;
@@ -385,7 +445,6 @@ getChatInformation();
           width: 100%;
           height: 100%;
           object-fit: cover;
-          
         }
       }
     }
