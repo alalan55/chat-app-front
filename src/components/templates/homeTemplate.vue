@@ -40,7 +40,6 @@ const pages = {
 
 // FUNCTIONS
 const getChatInformation = () => {
-  // console.log(chat_id);
   chat_information_dialog.value = true;
 };
 
@@ -56,7 +55,6 @@ const startConversation = async (user) => {
   try {
     await http.post("message/create-conversation", conversation_model);
     dinamyc_key_to_chat_list.value++;
-
     console.log("chamar o open chat passando o id da conversation para abrir a conversa");
   } catch (e) {
     console.error(e);

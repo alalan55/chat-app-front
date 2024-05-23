@@ -27,12 +27,12 @@ const items = ref([
       {
         label: "Visualizar Perfil",
         icon: "pi pi-user",
-        type: 2,
+        type: 1,
       },
       {
         label: "Remover usuário",
         icon: "pi pi-times",
-        type: 1,
+        type: 2,
       },
     ],
   },
@@ -56,10 +56,26 @@ const toggleOptionsMenu = (event, user) => {
   }
   menu.value.toggle(event);
 };
+
+const selectAction = (item) => {
+  switch (item.type) {
+    case 0:
+      console.log("tornar administrador");
+      break;
+    case 1:
+      console.log("visualizar perfil");
+      break;
+    case 2:
+      console.log(item, "item");
+  }
+};
+
+console.log(props.current_chat_infos)
 </script>
 
 <template>
   <div class="group-info">
+ 
     <div class="group-info__middle">
       <Skeleton
         v-if="props.loading_infos"
@@ -139,6 +155,7 @@ const toggleOptionsMenu = (event, user) => {
                   padding: 0.5rem;
                   cursor: pointer;
                 "
+                @click="selectAction(item)"
               >
                 <i :class="item.icon" />
                 <span>{{ item.label }}</span>

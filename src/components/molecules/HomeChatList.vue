@@ -1,6 +1,7 @@
 <script setup>
 // IMPORTS
 import { ref } from "vue";
+import { useUserStore } from "@/stores/user";
 import Badge from "primevue/badge";
 import http from "@/services/axios";
 import Skeleton from "primevue/skeleton";
@@ -9,8 +10,19 @@ import Skeleton from "primevue/skeleton";
 const emit = defineEmits(["open-chat"]);
 
 // VARIABLES
+// const t = Date.now()
+const store = useUserStore();
 const chat_list = ref([]);
 const loading_chat = ref(false);
+const url = `ws://localhost:8000/message/ws`;
+const web_socket = new WebSocket(url);
+
+web_socket.onmessage = (e) => {
+  const formated = JSON.parse(e.data);
+
+  if (formated.type == 2 && formated.content.includes(store.$current_user.id)) getChats();
+
+};
 
 // FUNCTIONS
 
@@ -33,8 +45,8 @@ getChats();
 <template>
   <!-- <pre>
     {{ store.$token }}
-  </pre>
-  <button @click="getChats()">FORCE RELOAD</button> -->
+  </pre>-->
+  <!-- <button @click="getChats()">FORCE RELOAD</button> -->
 
   <div class="chat-list">
     <div v-if="chat_list.length && !loading_chat" class="chat-list__list">

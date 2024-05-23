@@ -41,7 +41,7 @@ const login = async () => {
   }
 };
 
-store.resetUserInfos()
+store.resetUserInfos();
 </script>
 
 <template>
@@ -60,7 +60,7 @@ store.resetUserInfos()
             v-model="form.email"
             placeholder="Insira seu e-mail"
             :icon-left="'pi pi-at'"
-            style="margin-top: .8rem"
+            style="margin-top: 0.8rem"
           />
         </label>
         <label>
@@ -70,7 +70,7 @@ store.resetUserInfos()
             :icon-left="'pi pi-lock'"
             :icon-right="!showMessage ? 'pi pi-eye-slash' : 'pi pi-eye'"
             :type="`${!showMessage ? 'password' : 'text'}`"
-            style="margin-top: .8rem"
+            style="margin-top: 0.8rem"
             placeholder="Insira sua senha"
             @right-icon-click="showMessage = !showMessage"
           />

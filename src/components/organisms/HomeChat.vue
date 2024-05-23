@@ -5,6 +5,8 @@ import { useUserStore } from "@/stores/user";
 import Button from "primevue/button";
 import Menu from "primevue/menu";
 import TheInput from "../atoms/TheInput.vue";
+import AddUserToGrouoModal from "@/components/organisms/AddUserToGroupModal.vue";
+import Dialog from "primevue/dialog";
 import EmojiPicker from "vue3-emoji-picker";
 import "vue3-emoji-picker/css";
 
@@ -14,6 +16,7 @@ const emit = defineEmits(["back-previous-page", "get-chat-information"]);
 // VARIABLES
 // const id = Date.now();
 // const socket = ref(null);
+const add_user_modal = ref(false);
 const body = ref(null);
 const store = useUserStore();
 const current_chat = ref(store.$activeChat);
@@ -24,9 +27,14 @@ const show_emojis = ref(false);
 const menu = ref(null);
 const items = ref([
   {
+    label: "Adicionar usuário",
+    type: 3,
+  },
+  {
     label: "Dados do contato",
     type: 0,
   },
+
   {
     label: "Limpar conversa",
     type: 1,
@@ -85,6 +93,24 @@ const formateToJson = (datas) => {
   });
 
   return infos;
+};
+
+const chooseOption = (info) => {
+  switch (info.type) {
+    case 0:
+      console.log("Dados do contado");
+      break;
+    case 1:
+      console.log("Limpar conversa");
+      break;
+    case 2:
+      console.log("Apagar conversa");
+      break;
+    case 3:
+      console.log("Adicionar usuário");
+      add_user_modal.value = true
+      break;
+  }
 };
 
 const forceScroll = () => (body.value.scrollTop = body.value.scrollHeight);
@@ -188,7 +214,21 @@ onMounted(() => {
         @keyup="sendMenssage"
       />
     </div>
+
+
+    <Dialog
+    v-model:visible="add_user_modal"
+    modal
+    :style="{ width: '40vw' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+  >
+    <template #container>
+      <AddUserToGrouoModal @close="add_user_modal = false" />
+    </template>
+  </Dialog>
   </div>
+
+
 </template>
 
 <style lang="scss" scoped>

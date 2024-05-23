@@ -2,6 +2,8 @@
 // IMPORTS
 import { ref } from "vue";
 import { useUserStore } from "@/stores/user";
+import http from "@/services/axios";
+
 import Button from "primevue/button";
 
 // EMITS
@@ -12,6 +14,18 @@ const message_default = ref(
 
 // VARIABLES
 const store = useUserStore();
+
+// FUNCTIONS
+const getUserInfos = async () => {
+  try {
+    const { data } = await http.get(`user/${store.$current_user.id}`);
+    store.setCurrentUser(data.content);
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+getUserInfos();
 </script>
 
 <template>
