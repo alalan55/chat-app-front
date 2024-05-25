@@ -1,6 +1,6 @@
 <script setup>
 // IMPORTS
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useRefHistory } from "@vueuse/core";
 import http from "@/services/axios";
@@ -83,6 +83,12 @@ const closeGroupDialog = (event) => {
   if (event) dinamyc_key_to_chat_list.value++;
   new_group_dialog.value = false;
 };
+
+// WATCHERS
+
+watch(current_component_screen, (nv) => {
+  if (nv != "HomeChat") store.resetActiveChat();
+});
 </script>
 
 <template>

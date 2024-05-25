@@ -20,18 +20,70 @@ const web_socket = new WebSocket(url);
 web_socket.onmessage = (e) => {
   const formated = JSON.parse(e.data);
 
-  if (formated.type == 2 && formated.content.includes(store.$current_user.id)) getChats();
-
+  // console.log(formated);
+  switch (formated.type) {
+    // NOVA MENSAGEM
+    case 1:
+      handleNewMessage(formated);
+      break;
+    // NOVA CONVERSA INICIADA
+    case 2:
+      handleNewChat(formated);
+      break;
+  }
 };
 
 // FUNCTIONS
+
+const handleNewChat = (formated) => {
+  if (formated.type == 2 && formated.content.includes(store.$current_user.id))
+    updateChat();
+};
+
+const handleNewMessage = (info) => {
+  let founded_chat = chat_list.value.findIndex((chat) => chat.id == info.content);
+  const is_private_chat = chat_list.value[founded_chat].conversation_type == 0;
+  const new_message_from_another_user = info.from_user != store.$current_user.shared_id;
+  const chat_with_new_message_is_not_open =
+    !store.$activeChat || (store.$activeChat && store.$activeChat.id != info.content);
+
+  if (
+    founded_chat > -1 &&
+    is_private_chat &&
+    new_message_from_another_user &&
+    chat_with_new_message_is_not_open
+  ) {
+    chat_list.value[founded_chat].has_new_message = true;
+  }
+};
+
+const openChat = (info) => {
+  // verificar lógica para ver se vai ser necessário enviar os dados do founded chat ao inves do info, visto que manpulamos internamente se tem ou não novas mensagens
+
+  emit("open-chat", info);
+
+  let founded_chat = chat_list.value.findIndex((chat) => chat.id == info.id);
+
+  if (founded_chat > -1) {
+    chat_list.value[founded_chat].has_new_message = false;
+  }
+};
+
+const updateChat = async () => {
+  try {
+    const { data } = await http.get("message/chat-list");
+    chat_list.value = data.content;
+  } catch (e) {
+    console.error("error");
+  }
+};
 
 const getChats = async () => {
   try {
     loading_chat.value = true;
     const { data } = await http.get("message/chat-list");
     chat_list.value = data.content;
-    console.log(data.content, "lista de conversations");
+    // console.log(data.content, "lista de conversations");
     loading_chat.value = false;
   } catch (e) {
     console.error("error");
@@ -51,7 +103,7 @@ getChats();
   <div class="chat-list">
     <div v-if="chat_list.length && !loading_chat" class="chat-list__list">
       <template v-for="(item, i) in chat_list" :key="i">
-        <div class="item" @click="emit('open-chat', item)">
+        <div class="item" @click="openChat(item)">
           <div class="left">
             <figure></figure>
             <div class="texts">
@@ -61,8 +113,17 @@ getChats();
 
           <div class="right">
             <div class="texts">
-              <div class="hour"><span>09:00 pm</span></div>
-              <Badge value="" severity="info"></Badge>
+              <!--      <div class="hour"><span>09:00 pm</span></div> -->
+              <Badge
+                v-if="item?.has_new_message"
+                value=""
+                severity="info"
+                style="display: flex; align-items: center"
+                >+<i
+                  class="pi pi-envelope"
+                  style="font-size: 0.7rem; margin-left: 0.5rem"
+                ></i
+              ></Badge>
             </div>
           </div>
         </div>
