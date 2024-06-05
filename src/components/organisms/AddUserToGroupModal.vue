@@ -84,34 +84,28 @@ const isOnList = (user) => {
   return founded >= 0;
 };
 
-const addUsers = () => {
+const addUsers = async () => {
   const group_model = {};
   group_model.friends_list = users_list_group.value.map((el) => el.id);
-  group_model.conversation_type = 1;
-  console.log("body:", group_model, "id_do_grupo:", current_chat_infos.value.id);
+  group_model.conversation_id = current_chat_infos.value.id;
 
-  //   try {
-  //     await http.post("message/create-conversation", group_model);
+  try {
+    loading.value = true;
 
-  //     toast.add({
-  //       severity: "sucess",
-  //       summary: "Sucesso",
-  //       detail: "Grupo criado com sucesso",
-  //       life: 3000,
-  //     });
+    await http.post("message/add-user-on-group", group_model);
 
-  //     loading_creation.value = false;
+    loading.value = false;
 
-  //     emit("close", true);
-  //   } catch (e) {
-  //     toast.add({
-  //       severity: "error",
-  //       summary: "Falha",
-  //       detail: "Error ao criar grupo",
-  //       life: 3000,
-  //     });
-  //     loading_creation.value = false;
-  //   }
+    emit("close", true);
+  } catch (e) {
+    toast.add({
+      severity: "error",
+      summary: "Falha",
+      detail: "Error ao adicionar usuário",
+      life: 3000,
+    });
+    loading.value = false;
+  }
 };
 
 // WATCHERS
@@ -181,7 +175,7 @@ getInformation();
       <Button
         label="Adicionar usuário"
         severity="info"
-        :disabled="users_list_group.length < 1"
+        :loading="loading"
         @click="addUsers"
       />
     </div>

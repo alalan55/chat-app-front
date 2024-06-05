@@ -70,12 +70,11 @@ const selectAction = (item) => {
   }
 };
 
-console.log(props.current_chat_infos)
+console.log(props.current_chat_infos);
 </script>
 
 <template>
   <div class="group-info">
- 
     <div class="group-info__middle">
       <Skeleton
         v-if="props.loading_infos"
@@ -173,12 +172,14 @@ console.log(props.current_chat_infos)
 
 .group-info {
   width: 100%;
-  height: 100%;
+  // height: 100%;
+  height: 90dvh;
   display: flex;
   flex-direction: column;
   padding: 1rem;
   gap: 1rem;
   position: relative;
+  overflow: hidden !important;
 
   &__header {
     display: flex;
@@ -218,14 +219,17 @@ console.log(props.current_chat_infos)
   }
 
   &__body-group {
-    flex: 1;
-    overflow-y: auto;
-    @include trackScrollBar;
+    height: 250px;
+    // flex: 1;
     // border: 1px solid red;
     // padding: 0.5rem;
+    overflow: hidden;
+    overflow-y: auto;
+    @include trackScrollBar;
 
     ul {
-      margin-top: 0.5rem;
+      overflow-y: auto;
+      // margin-top: 0.5rem;
       padding: 0;
       display: flex;
       flex-direction: column;
@@ -270,6 +274,11 @@ console.log(props.current_chat_infos)
         }
       }
     }
+
+    @media(min-width: 1400px){
+      height: 380px;
+    }
   }
+
 }
 </style>
