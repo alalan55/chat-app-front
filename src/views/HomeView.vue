@@ -13,5 +13,9 @@ import HomeTemplate from "@/components/templates/homeTemplate.vue";
   height: 100vh;
   height: 100dvh;
   padding: 2rem;
+
+  @media(max-width: 750px){
+    padding: 1rem;
+  }
 }
 </style>

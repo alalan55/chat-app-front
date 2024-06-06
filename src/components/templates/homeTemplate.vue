@@ -1,6 +1,6 @@
 <script setup>
 // IMPORTS
-import { ref, watch } from "vue";
+import { ref, watch, watchEffect, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import { useRefHistory } from "@vueuse/core";
 import http from "@/services/axios";
@@ -16,6 +16,7 @@ import StartupModal from "../organisms/StartupModal.vue";
 import HomeChat from "../organisms/HomeChat.vue";
 import NewGroupModal from "../organisms/NewGroupModal.vue";
 import ChatInformationModal from "../organisms/ChatInformation/index.vue";
+import HomeTemplateMobile from "./homeTemplateMobile.vue";
 import Dialog from "primevue/dialog";
 
 // VARIABLES
@@ -29,12 +30,20 @@ const add_friend_dialog = ref(false);
 const update_profile_dialog = ref(false);
 const new_group_dialog = ref(false);
 const chat_information_dialog = ref(false);
+const is_mobile = ref(false);
+// const current_component_screen = ref("StartupModal");
 const current_component_screen = ref("StartupModal");
 const { undo } = useRefHistory(current_component_screen);
 
 const pages = {
   UserProfile,
   StartupModal,
+  HomeChat,
+};
+
+const pagesMobile = {
+  UserProfile,
+  HomeTemplateMobile,
   HomeChat,
 };
 
@@ -84,15 +93,43 @@ const closeGroupDialog = (event) => {
   new_group_dialog.value = false;
 };
 
+const checkScreenSize = () => {
+  if (window.innerWidth <= 850) {
+    is_mobile.value = true;
+  } else {
+    is_mobile.value = false;
+  }
+};
+
+onMounted(() => {
+  checkScreenSize();
+  window.addEventListener("resize", checkScreenSize);
+});
+
+// Remove o listener quando o componente é desmontado
+onUnmounted(() => {
+  window.removeEventListener("resize", checkScreenSize);
+});
+
+// Usa o watchEffect para atualizar a referência se a largura da tela mudar
+watchEffect(() => {
+  checkScreenSize();
+});
+
 // WATCHERS
 
 watch(current_component_screen, (nv) => {
   if (nv != "HomeChat") store.resetActiveChat();
 });
+
+watch(is_mobile, (nv) => {
+  if (nv) current_component_screen.value = "HomeTemplateMobile";
+  else current_component_screen.value = "StartupModal";
+});
 </script>
 
 <template>
-  <main class="container">
+  <main class="container desk">
     <section class="container__profile">
       <HomeChatHeader
         @open-friends-list="openFriendsListModal"
@@ -190,6 +227,24 @@ watch(current_component_screen, (nv) => {
       </template>
     </Dialog>
   </main>
+
+  <main class="container mobile">
+    <Transition name="fade" mode="out-in">
+      <component
+        :is="pagesMobile[current_component_screen]"
+        :dinamyc_key_to_chat_list="dinamyc_key_to_chat_list"
+        @back-previous-page="undo()"
+        @openFriendsListModal="openFriendsListModal"
+        @open-option-dialog="chooseOptionModal"
+        @get-chat-information="getChatInformation"
+        @open-profile="setProfileToScreen"
+        @new-group="new_group_dialog = true"
+        @add-friend="add_friend_dialog = true"
+        @open-chat="openChat"
+        :key="dinamyc_key_to_content_screen"
+      />
+    </Transition>
+  </main>
 </template>
 
 <style lang="scss" scoped>
@@ -234,6 +289,32 @@ watch(current_component_screen, (nv) => {
     min-width: 350px;
     transition: 0.2s ease-in-out;
     @include trackScrollBar;
+  }
+
+  // @media (max-width: 850px) {
+  //   display: flex;
+  //   flex-direction: column;
+  //   & > section {
+  //     border: 1px solid red;
+  //   }
+
+  //   &__content {
+  //     display: none;
+  //   }
+  // }
+}
+
+.mobile {
+  display: none;
+}
+
+@media (max-width: 850px) {
+  .desk {
+    display: none;
+  }
+  .mobile {
+    display: block;
+    // border: 1px solid red;
   }
 }
 </style>
